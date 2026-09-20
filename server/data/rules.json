@@ -1,0 +1,171 @@
+[
+  {
+    "id": "RULE_6_1_A",
+    "ruleReference": "Rule 6(1)(a) read with Rule 10",
+    "title": "Manufacturer / Packer / Importer Details",
+    "description": "Name and complete physical address of the manufacturer, packer, or importer including locatable details.",
+    "category": "Identity",
+    "enabled": true,
+    "severity": "CRITICAL",
+    "parameters": {
+      "requireName": true,
+      "requireAddress": true,
+      "requirePinCode": true,
+      "keywords": ["manufactured by", "mfg by", "packed by", "marketed by", "imported by", "mfd by"],
+      "pinRegex": "\\b[1-9][0-9]{5}\\b"
+    }
+  },
+  {
+    "id": "RULE_6_1_B",
+    "ruleReference": "Rule 6(1)(b)",
+    "title": "Common / Generic Name of Commodity",
+    "description": "Common or generic name of the commodity contained in the package.",
+    "category": "Identity",
+    "enabled": true,
+    "severity": "CRITICAL",
+    "parameters": {
+      "requireOnPDP": true,
+      "minWordCount": 1
+    }
+  },
+  {
+    "id": "RULE_6_1_C_NET_QTY",
+    "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+    "title": "Net Quantity & Standard SI Unit Compliance",
+    "description": "Net quantity in standard SI units (g, kg, ml, l, m, N) appropriate for magnitude without non-standard symbols.",
+    "category": "Quantity",
+    "enabled": true,
+    "severity": "CRITICAL",
+    "parameters": {
+      "validUnits": ["g", "kg", "ml", "l", "L", "m", "cm", "mm", "N", "U"],
+      "prohibitedSymbols": ["gms", "gm", "kgs", "kilo", "kilos", "ltr", "ltrs", "ml."],
+      "thresholds": {
+        "massGramsMax": 999.99,
+        "volumeMlMax": 999.99
+      }
+    }
+  },
+  {
+    "id": "RULE_12_6_PROHIBITED",
+    "ruleReference": "Rule 12(6)",
+    "title": "Prohibition of Misleading Quantity Qualifiers",
+    "description": "Net quantity declaration must not be qualified by words like 'approx', 'about', 'minimum', 'average'.",
+    "category": "Quantity",
+    "enabled": true,
+    "severity": "CRITICAL",
+    "parameters": {
+      "prohibitedWords": [
+        "approx",
+        "approx.",
+        "approximately",
+        "about",
+        "minimum",
+        "min.",
+        "average",
+        "avg",
+        "not less than",
+        "when packed",
+        "estimated"
+      ]
+    }
+  },
+  {
+    "id": "RULE_6_1_D_DATE",
+    "ruleReference": "Rule 6(1)(d)",
+    "title": "Month & Year of Manufacture / Packing / Import",
+    "description": "Declaration of month and year in which commodity is manufactured, packed or imported.",
+    "category": "Traceability",
+    "enabled": true,
+    "severity": "HIGH",
+    "parameters": {
+      "dateKeywords": ["mfg date", "mfg.", "pkd", "packed", "import date", "month & year", "mfd", "date of packing"],
+      "allowedExemptCategories": ["bidis", "incense sticks", "agarbatti"]
+    }
+  },
+  {
+    "id": "RULE_6_1_E_MRP",
+    "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+    "title": "Maximum Retail Price (MRP) Statutory Format",
+    "description": "Must state 'Maximum Retail Price' or 'MRP', currency symbol (₹ or Rs.), numerical amount, and 'inclusive of all taxes'.",
+    "category": "Pricing",
+    "enabled": true,
+    "severity": "CRITICAL",
+    "parameters": {
+      "mrpKeywords": ["mrp", "maximum retail price", "max. retail price"],
+      "currencySymbols": ["₹", "rs.", "rs", "inr"],
+      "taxPhrases": ["inclusive of all taxes", "incl. of all taxes", "incl of all taxes", "inclusive of taxes", "incl. all taxes"]
+    }
+  },
+  {
+    "id": "RULE_6_2_CONSUMER_CARE",
+    "ruleReference": "Rule 6(2)",
+    "title": "Consumer Care Redressal Mechanism",
+    "description": "Name/designation of contact person, full postal address, telephone/toll-free number, and active email address.",
+    "category": "Consumer Protection",
+    "enabled": true,
+    "severity": "HIGH",
+    "parameters": {
+      "requireDesignation": true,
+      "requirePhone": true,
+      "requireEmail": true,
+      "requireAddress": true,
+      "keywords": ["consumer care", "customer care", "helpline", "feedback", "complaint", "toll free", "care cell"]
+    }
+  },
+  {
+    "id": "RULE_5_STANDARD_PACK",
+    "ruleReference": "Rule 5 read with Second Schedule",
+    "title": "Second Schedule Standard Pack Size Compliance",
+    "description": "Commodity net quantity must match prescribed standard sizes unless prominently labelled with non-standard pack disclaimer.",
+    "category": "Standardization",
+    "enabled": true,
+    "severity": "MEDIUM",
+    "parameters": {
+      "disclaimerPhrases": ["non standard pack", "non-standard pack", "non standard size", "non-standard size"]
+    }
+  },
+  {
+    "id": "RULE_7_FONT_HEIGHT",
+    "ruleReference": "Rule 7 (Tables I & II)",
+    "title": "Minimum Numeral Font Height for Net Quantity",
+    "description": "Minimum height of numerals and letters for net quantity declaration in mm based on net quantity magnitude.",
+    "category": "Display",
+    "enabled": true,
+    "severity": "MEDIUM",
+    "parameters": {
+      "tableI": [
+        { "maxQtyG": 50, "minHeightMm": 1.0 },
+        { "maxQtyG": 200, "minHeightMm": 2.0 },
+        { "maxQtyG": 1000, "minHeightMm": 4.0 },
+        { "maxQtyG": 999999, "minHeightMm": 6.0 }
+      ],
+      "assumedDpi": 150
+    }
+  },
+  {
+    "id": "RULE_9_4_LANGUAGE",
+    "ruleReference": "Rule 9(4)",
+    "title": "Official Language Requirement (Hindi / English)",
+    "description": "All mandatory declarations must be in English or Hindi (Devanagari script).",
+    "category": "Legibility",
+    "enabled": true,
+    "severity": "HIGH",
+    "parameters": {
+      "allowedScripts": ["Latin", "Devanagari"]
+    }
+  },
+  {
+    "id": "RULE_26_EXEMPTION",
+    "ruleReference": "Rule 26",
+    "title": "Statutory Exemptions Check",
+    "description": "Automatic exemption filter for packages <= 10g or 10ml, fast food items, scheduled drugs, or agri bags > 50kg.",
+    "category": "Exemptions",
+    "enabled": true,
+    "severity": "INFO",
+    "parameters": {
+      "smallPackThresholdG": 10,
+      "smallPackThresholdMl": 10,
+      "agriBulkThresholdKg": 50
+    }
+  }
+]

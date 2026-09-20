@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 680" width="600" height="680">
+  <defs>
+    <linearGradient id="shamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="680" rx="16" fill="#f0f9ff" stroke="#bae6fd" stroke-width="2"/>
+  <rect x="0" y="0" width="600" height="140" rx="16" fill="url(#shamGrad)"/>
+  <rect x="0" y="120" width="600" height="20" fill="url(#shamGrad)"/>
+
+  <text x="300" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">SATINGLOW</text>
+  <text x="300" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#bae6fd" text-anchor="middle">SILKY HERBAL SHAMPOO</text>
+  <text x="300" y="112" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" text-anchor="middle">हर्बल शैम्पू - मिनी पैक</text>
+
+  <!-- Small Sachet Exemption Notice -->
+  <rect x="400" y="155" width="170" height="24" rx="4" fill="#e0f2fe"/>
+  <text x="485" y="171" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#0369a1" text-anchor="middle">SACHET / MINI PACK</text>
+
+  <rect x="40" y="245" width="520" height="380" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <rect x="40" y="245" width="520" height="28" fill="#0369a1" rx="8"/>
+  <rect x="40" y="265" width="520" height="8" fill="#0369a1"/>
+  <text x="300" y="264" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="1">MINI-PACK DECLARATIONS (RULE 26 APPLIES)</text>
+
+  <!-- Net Quantity (8 ml: <= 10 ml triggers Rule 26 Small Pack Exemption) -->
+  <g id="box-net-qty">
+    <rect x="60" y="285" width="180" height="42" rx="4" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text x="75" y="312" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#0369a1">Net Vol: 8 ml</text>
+  </g>
+
+  <!-- MRP -->
+  <g id="box-mrp">
+    <rect x="60" y="340" width="320" height="42" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="367" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#0f172a">MRP ₹ 3.00 <tspan font-size="13" font-weight="normal" fill="#475569">(incl. of all taxes)</tspan></text>
+  </g>
+
+  <!-- Date -->
+  <g id="box-mfg-date">
+    <rect x="60" y="395" width="180" height="36" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="419" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155">Mfg: 01/2026</text>
+  </g>
+
+  <!-- Manufacturer -->
+  <g id="box-manufacturer">
+    <rect x="60" y="445" width="480" height="68" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="468" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">BioFlora Wellness India,</text>
+    <text x="75" y="487" font-family="Arial, sans-serif" font-size="12" fill="#334155">Baddi, Solan, Himachal Pradesh 173205.</text>
+  </g>
+
+  <!-- Consumer Care -->
+  <g id="box-consumer-care">
+    <rect x="60" y="525" width="480" height="70" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="547" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Consumer Feedback:</text>
+    <text x="75" y="565" font-family="Arial, sans-serif" font-size="11" fill="#334155">Helpline: 01795-244111</text>
+    <text x="75" y="582" font-family="Arial, sans-serif" font-size="11" fill="#2563eb">Email: care@bioflora.in</text>
+  </g>
+</svg>

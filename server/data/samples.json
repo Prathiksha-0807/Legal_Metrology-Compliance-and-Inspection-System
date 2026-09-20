@@ -1,0 +1,258 @@
+[
+  {
+    "id": "sample_compliant_tea",
+    "name": "Golden Leaf CTC Tea (250g)",
+    "category": "Tea",
+    "manufacturer": "Apex Beverages India Pvt. Ltd.",
+    "image": "/samples/sample_tea_label.svg",
+    "isPDP": true,
+    "expectedVerdict": "COMPLIANT",
+    "extractedFields": {
+      "commodityName": {
+        "text": "Golden Leaf Premium CTC Black Tea",
+        "bbox": { "x": 60, "y": 65, "w": 480, "h": 50 },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Qty: 250 g",
+        "value": 250,
+        "unit": "g",
+        "bbox": { "x": 60, "y": 280, "w": 220, "h": 45 },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 145.00 (inclusive of all taxes)",
+        "amount": 145.00,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": { "x": 60, "y": 340, "w": 380, "h": 40 },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd Date: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": { "x": 60, "y": 395, "w": 220, "h": 35 },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured & Packed by: Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020, India.",
+        "pinCode": "110020",
+        "bbox": { "x": 60, "y": 450, "w": 480, "h": 65 },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "For complaints, contact: Consumer Care Officer, Apex Beverages, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in",
+        "phone": "1800-11-4433",
+        "email": "customercare@apextea.in",
+        "bbox": { "x": 60, "y": 530, "w": 480, "h": 60 },
+        "confidence": 0.94
+      }
+    }
+  },
+  {
+    "id": "sample_mrp_violation",
+    "name": "PureDrop Kachi Ghani Mustard Oil (1000ml)",
+    "category": "Edible Oils",
+    "manufacturer": "PureDrop Agro Foods Ltd.",
+    "image": "/samples/sample_oil_label.svg",
+    "isPDP": true,
+    "expectedVerdict": "NON_COMPLIANT",
+    "extractedFields": {
+      "commodityName": {
+        "text": "PureDrop Kachi Ghani Mustard Oil",
+        "bbox": { "x": 60, "y": 65, "w": 480, "h": 50 },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 1000 ml",
+        "value": 1000,
+        "unit": "ml",
+        "bbox": { "x": 60, "y": 280, "w": 220, "h": 45 },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP Rs. 185.00",
+        "amount": 185.00,
+        "currency": "Rs.",
+        "hasTaxes": false,
+        "bbox": { "x": 60, "y": 340, "w": 240, "h": 40 },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg Date: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": { "x": 60, "y": 395, "w": 220, "h": 35 },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Mfg by: PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001, India.",
+        "pinCode": "132001",
+        "bbox": { "x": 60, "y": 450, "w": 480, "h": 65 },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Care: Manager, PureDrop Agro, Karnal. Phone: 0184-225588, Email: care@puredropoil.com",
+        "phone": "0184-225588",
+        "email": "care@puredropoil.com",
+        "bbox": { "x": 60, "y": 530, "w": 480, "h": 60 },
+        "confidence": 0.94
+      }
+    }
+  },
+  {
+    "id": "sample_prohibited_words",
+    "name": "Royal Shahi Garam Masala (approx 200g)",
+    "category": "Spices",
+    "manufacturer": "Royal Spice Mills",
+    "image": "/samples/sample_masala_label.svg",
+    "isPDP": true,
+    "expectedVerdict": "NON_COMPLIANT",
+    "extractedFields": {
+      "commodityName": {
+        "text": "Royal Shahi Garam Masala (Blended Spice)",
+        "bbox": { "x": 60, "y": 65, "w": 480, "h": 50 },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Wt: approx 200g",
+        "value": 200,
+        "unit": "g",
+        "prohibitedWord": "approx",
+        "bbox": { "x": 60, "y": 280, "w": 260, "h": 45 },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 110.00 (incl. of all taxes)",
+        "amount": 110.00,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": { "x": 60, "y": 340, "w": 380, "h": 40 },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd: 03/2026",
+        "month": "03",
+        "year": "2026",
+        "bbox": { "x": 60, "y": 395, "w": 200, "h": 35 },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Packed by: Royal Spice Mills, Khari Baoli, Old Delhi 110006.",
+        "pinCode": "110006",
+        "bbox": { "x": 60, "y": 450, "w": 480, "h": 65 },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Helpline: 011-23998877. No email provided.",
+        "phone": "011-23998877",
+        "email": null,
+        "bbox": { "x": 60, "y": 530, "w": 480, "h": 60 },
+        "confidence": 0.90
+      }
+    }
+  },
+  {
+    "id": "sample_non_standard_pack",
+    "name": "UltraClean Detergent Powder (380g)",
+    "category": "Detergent Powder",
+    "manufacturer": "Zenith Homecare Products",
+    "image": "/samples/sample_detergent_label.svg",
+    "isPDP": true,
+    "expectedVerdict": "NON_COMPLIANT",
+    "extractedFields": {
+      "commodityName": {
+        "text": "UltraClean Concentrated Detergent Powder",
+        "bbox": { "x": 60, "y": 65, "w": 480, "h": 50 },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Weight: 380 g",
+        "value": 380,
+        "unit": "g",
+        "bbox": { "x": 60, "y": 280, "w": 240, "h": 45 },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 75.00 (inclusive of all taxes)",
+        "amount": 75.00,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": { "x": 60, "y": 340, "w": 380, "h": 40 },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": { "x": 60, "y": 395, "w": 200, "h": 35 },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured by: Zenith Homecare Products, GIDC Naroda, Ahmedabad, Gujarat 382330.",
+        "pinCode": "382330",
+        "bbox": { "x": 60, "y": 450, "w": 480, "h": 65 },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Care Cell: Toll Free 1800-200-9911, Email: support@zenithhomecare.com, Address: GIDC Naroda Ahmedabad.",
+        "phone": "1800-200-9911",
+        "email": "support@zenithhomecare.com",
+        "bbox": { "x": 60, "y": 530, "w": 480, "h": 60 },
+        "confidence": 0.94
+      }
+    }
+  },
+  {
+    "id": "sample_exempt_sachet",
+    "name": "SatinGlow Herbal Shampoo Sachet (8ml)",
+    "category": "Cosmetics / Shampoo",
+    "manufacturer": "BioFlora Wellness India",
+    "image": "/samples/sample_shampoo_label.svg",
+    "isPDP": true,
+    "expectedVerdict": "EXEMPT",
+    "extractedFields": {
+      "commodityName": {
+        "text": "SatinGlow Silky Herbal Shampoo",
+        "bbox": { "x": 60, "y": 65, "w": 480, "h": 50 },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 8 ml",
+        "value": 8,
+        "unit": "ml",
+        "bbox": { "x": 60, "y": 280, "w": 180, "h": 45 },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 3.00 (incl. of all taxes)",
+        "amount": 3.00,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": { "x": 60, "y": 340, "w": 320, "h": 40 },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": { "x": 60, "y": 395, "w": 180, "h": 35 },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "BioFlora Wellness India, Baddi, Solan, Himachal Pradesh 173205.",
+        "pinCode": "173205",
+        "bbox": { "x": 60, "y": 450, "w": 480, "h": 65 },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Feedback: care@bioflora.in, Helpline: 01795-244111",
+        "phone": "01795-244111",
+        "email": "care@bioflora.in",
+        "bbox": { "x": 60, "y": 530, "w": 480, "h": 60 },
+        "confidence": 0.94
+      }
+    }
+  }
+]

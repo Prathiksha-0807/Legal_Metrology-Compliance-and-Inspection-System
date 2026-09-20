@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 680" width="600" height="680">
+  <defs>
+    <linearGradient id="detGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="680" rx="16" fill="#eff6ff" stroke="#bfdbfe" stroke-width="2"/>
+  <rect x="0" y="0" width="600" height="140" rx="16" fill="url(#detGrad)"/>
+  <rect x="0" y="120" width="600" height="20" fill="url(#detGrad)"/>
+
+  <text x="300" y="52" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">ULTRACLEAN</text>
+  <text x="300" y="85" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#93c5fd" text-anchor="middle">CONCENTRATED DETERGENT POWDER</text>
+  <text x="300" y="112" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" text-anchor="middle">अल्ट्राक्लीन डिटर्जेंट पाउडर</text>
+
+  <rect x="440" y="155" width="130" height="24" rx="4" fill="#e2e8f0"/>
+  <text x="505" y="171" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">PDP PANEL</text>
+
+  <rect x="40" y="245" width="520" height="380" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5"/>
+  <rect x="40" y="245" width="520" height="28" fill="#1e3a8a" rx="8"/>
+  <rect x="40" y="265" width="520" height="8" fill="#1e3a8a"/>
+  <text x="300" y="264" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#eff6ff" text-anchor="middle" letter-spacing="1">STATUTORY DECLARATIONS</text>
+
+  <!-- Net Quantity (380 g: Non-standard pack size without disclaimer under Rule 5) -->
+  <g id="box-net-qty">
+    <rect x="60" y="285" width="240" height="42" rx="4" fill="#eff6ff" stroke="#bfdbfe"/>
+    <text x="75" y="312" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#1e3a8a">Net Weight: 380 g</text>
+  </g>
+
+  <!-- MRP -->
+  <g id="box-mrp">
+    <rect x="60" y="340" width="480" height="42" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="367" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#0f172a">MRP ₹ 75.00 <tspan font-size="13" font-weight="normal" fill="#475569">(inclusive of all taxes)</tspan></text>
+  </g>
+
+  <!-- Date -->
+  <g id="box-mfg-date">
+    <rect x="60" y="395" width="200" height="36" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="419" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#334155">Mfg: 02/2026</text>
+  </g>
+
+  <!-- Manufacturer -->
+  <g id="box-manufacturer">
+    <rect x="60" y="445" width="480" height="68" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="468" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Manufactured by:</text>
+    <text x="75" y="487" font-family="Arial, sans-serif" font-size="12" fill="#334155">Zenith Homecare Products, GIDC Naroda,</text>
+    <text x="75" y="504" font-family="Arial, sans-serif" font-size="12" fill="#334155">Ahmedabad, Gujarat 382330.</text>
+  </g>
+
+  <!-- Consumer Care -->
+  <g id="box-consumer-care">
+    <rect x="60" y="525" width="480" height="70" rx="4" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="75" y="547" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Care Cell:</text>
+    <text x="75" y="565" font-family="Arial, sans-serif" font-size="11" fill="#334155">Toll Free 1800-200-9911, Address: GIDC Naroda Ahmedabad</text>
+    <text x="75" y="582" font-family="Arial, sans-serif" font-size="11" fill="#2563eb">Email: support@zenithhomecare.com</text>
+  </g>
+</svg>

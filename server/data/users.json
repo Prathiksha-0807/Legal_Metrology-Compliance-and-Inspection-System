@@ -1,0 +1,18 @@
+[
+  {
+    "id": "usr_inspector_01",
+    "name": "Inspector R. Sharma",
+    "role": "INSPECTOR",
+    "designation": "Legal Metrology Inspector, Zone 4",
+    "badgeNumber": "LM-DL-2024-884",
+    "email": "r.sharma.inspector@gov.in"
+  },
+  {
+    "id": "usr_admin_01",
+    "name": "Controller V. Kumar",
+    "role": "ADMIN",
+    "designation": "Joint Controller of Legal Metrology & System Admin",
+    "badgeNumber": "LM-HQ-ADMIN-01",
+    "email": "v.kumar.admin@gov.in"
+  }
+]

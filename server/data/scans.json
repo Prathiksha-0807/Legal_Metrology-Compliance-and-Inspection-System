@@ -1,0 +1,2010 @@
+[
+  {
+    "id": "SCAN-014020",
+    "productId": "sample_exempt_sachet",
+    "productName": "SatinGlow Herbal Shampoo Sachet (8ml)",
+    "category": "Cosmetics / Shampoo",
+    "manufacturer": "BioFlora Wellness India",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_shampoo_label.svg",
+    "timestamp": "2026-09-17T14:06:54.020Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "EXEMPT",
+    "summary": {
+      "totalRulesChecked": 10,
+      "passed": 9,
+      "failed": 0,
+      "review": 0,
+      "exempt": 1
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "SatinGlow Silky Herbal Shampoo",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 8 ml",
+        "value": 8,
+        "unit": "ml",
+        "prohibitedWord": null,
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 3.00 (incl. of all taxes)",
+        "amount": 3,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 320,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 180,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "BioFlora Wellness India, Baddi, Solan, Himachal Pradesh 173205.",
+        "pinCode": "173205",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Feedback: care@bioflora.in, Helpline: 01795-244111",
+        "phone": "01795-244111",
+        "email": "care@bioflora.in",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      },
+      "dimensions": null,
+      "rawText": "SatinGlow Silky Herbal Shampoo\nNet Vol: 8 ml\nMRP ₹ 3.00 (incl. of all taxes)\nMfg: 01/2026\nBioFlora Wellness India, Baddi, Solan, Himachal Pradesh 173205.\nFeedback: care@bioflora.in, Helpline: 01795-244111"
+    },
+    "results": [
+      {
+        "ruleId": "RULE_26_EXEMPTION",
+        "ruleReference": "Rule 26",
+        "title": "Statutory Exemptions Check",
+        "category": "Exemptions",
+        "verdict": "EXEMPT",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 8 ml",
+        "explanation": "Statutory Exemption Applied: Package net quantity (8ml) is ≤ 10ml. Under Rule 26(a), small packages are exempt from standard sizes and detailed retail price breakdown.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "BioFlora Wellness India, Baddi, Solan, Himachal Pradesh 173205.",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (173205).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "SatinGlow Silky Herbal Shampoo",
+        "explanation": "Compliant: Commodity clearly identified as \"SatinGlow Silky Herbal Shampoo\".",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 8 ml",
+        "explanation": "Compliant: No prohibited qualifying words (\"approx\", \"minimum\", \"about\") found in net quantity declaration.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 8 ml",
+        "explanation": "Compliant: Declared as 8 ml using proper SI standard measure.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "category": "Traceability",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Mfg: 01/2026",
+        "explanation": "Compliant: Month and year declared as 01/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 180,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "category": "Pricing",
+        "verdict": "PASS",
+        "field": "MRP",
+        "extractedText": "MRP ₹ 3.00 (incl. of all taxes)",
+        "explanation": "Compliant: Valid MRP format with statutory \"inclusive of all taxes\" declaration and currency symbol (₹).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 320,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "category": "Consumer Protection",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Feedback: care@bioflora.in, Helpline: 01795-244111",
+        "explanation": "Compliant: Full consumer care grievance mechanism provided (Helpline: 01795-244111, Email: care@bioflora.in).",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_7_FONT_HEIGHT",
+        "ruleReference": "Rule 7 (Tables I & II)",
+        "title": "Minimum Numeral Font Height for Net Quantity",
+        "category": "Display",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Numeral bbox height: 45px (~7.6 mm @ 150 DPI)",
+        "explanation": "Compliant: Estimated numeral height of ~7.6 mm meets the minimum prescribed threshold of 1 mm (Rule 7, Table I).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "category": "Legibility",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-014014",
+    "productId": "sample_non_standard_pack",
+    "productName": "UltraClean Detergent Powder (380g)",
+    "category": "Detergent Powder",
+    "manufacturer": "Zenith Homecare Products",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_detergent_label.svg",
+    "timestamp": "2026-09-17T14:06:54.014Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "NON_COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 10,
+      "passed": 9,
+      "failed": 1,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "UltraClean Concentrated Detergent Powder",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Weight: 380 g",
+        "value": 380,
+        "unit": "g",
+        "prohibitedWord": null,
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 75.00 (inclusive of all taxes)",
+        "amount": 75,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured by: Zenith Homecare Products, GIDC Naroda, Ahmedabad, Gujarat 382330.",
+        "pinCode": "382330",
+        "hasAddressDetails": true,
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Care Cell: Toll Free 1800-200-9911, Email: support@zenithhomecare.com, Address: GIDC Naroda Ahmedabad.",
+        "phone": "1800-200-9911",
+        "email": "support@zenithhomecare.com",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      },
+      "dimensions": null,
+      "rawText": "UltraClean Concentrated Detergent Powder\nNet Weight: 380 g\nMRP ₹ 75.00 (inclusive of all taxes)\nMfg: 02/2026\nManufactured by: Zenith Homecare Products, GIDC Naroda, Ahmedabad, Gujarat 382330.\nCare Cell: Toll Free 1800-200-9911, Email: support@zenithhomecare.com, Address: GIDC Naroda Ahmedabad."
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "Manufactured by: Zenith Homecare Products, GIDC Naroda, Ahmedabad, Gujarat 382330.",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (382330).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "UltraClean Concentrated Detergent Powder",
+        "explanation": "Compliant: Commodity clearly identified as \"UltraClean Concentrated Detergent Powder\".",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Weight: 380 g",
+        "explanation": "Compliant: No prohibited qualifying words (\"approx\", \"minimum\", \"about\") found in net quantity declaration.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Weight: 380 g",
+        "explanation": "Compliant: Declared as 380 g using proper SI standard measure.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "category": "Traceability",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Mfg: 02/2026",
+        "explanation": "Compliant: Month and year declared as 02/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "category": "Pricing",
+        "verdict": "PASS",
+        "field": "MRP",
+        "extractedText": "MRP ₹ 75.00 (inclusive of all taxes)",
+        "explanation": "Compliant: Valid MRP format with statutory \"inclusive of all taxes\" declaration and currency symbol (₹).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "category": "Consumer Protection",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Care Cell: Toll Free 1800-200-9911, Email: support@zenithhomecare.com, Address: GIDC Naroda Ahmedabad.",
+        "explanation": "Compliant: Full consumer care grievance mechanism provided (Helpline: 1800-200-9911, Email: support@zenithhomecare.com).",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_5_STANDARD_PACK",
+        "ruleReference": "Rule 5 read with Second Schedule",
+        "title": "Second Schedule Standard Pack Size Compliance",
+        "category": "Standardization",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Weight: 380 g [Standard sizes for Detergent Powder: 50, 100, 200, 500, 700, 1000, 1500, 2000, 3000, 4000, 5000 g]",
+        "explanation": "Violation of Rule 5 & Second Schedule: 380 g is NOT a prescribed standard size for \"Detergent Powder\". Standard sizes are: 50, 100, 200, 500, 700, 1000, 1500, 2000, 3000, 4000, 5000 g. Package lacks required \"Non-standard pack\" disclaimer.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_7_FONT_HEIGHT",
+        "ruleReference": "Rule 7 (Tables I & II)",
+        "title": "Minimum Numeral Font Height for Net Quantity",
+        "category": "Display",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Numeral bbox height: 45px (~7.6 mm @ 150 DPI)",
+        "explanation": "Compliant: Estimated numeral height of ~7.6 mm meets the minimum prescribed threshold of 4 mm (Rule 7, Table I).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "category": "Legibility",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-014008",
+    "productId": "sample_prohibited_words",
+    "productName": "Royal Shahi Garam Masala (approx 200g)",
+    "category": "Spices",
+    "manufacturer": "Royal Spice Mills",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_masala_label.svg",
+    "timestamp": "2026-09-17T14:06:54.008Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "NON_COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 9,
+      "passed": 7,
+      "failed": 2,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "Royal Shahi Garam Masala (Blended Spice)",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Wt: approx 200g",
+        "value": 200,
+        "unit": "g",
+        "prohibitedWord": "approx",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 110.00 (incl. of all taxes)",
+        "amount": 110,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd: 03/2026",
+        "month": "03",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Packed by: Royal Spice Mills, Khari Baoli, Old Delhi 110006.",
+        "pinCode": "110006",
+        "hasAddressDetails": true,
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Helpline: 011-23998877. No email provided.",
+        "phone": "011-23998877",
+        "email": null,
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.9
+      },
+      "dimensions": null,
+      "rawText": "Royal Shahi Garam Masala (Blended Spice)\nNet Wt: approx 200g\nMRP ₹ 110.00 (incl. of all taxes)\nPkd: 03/2026\nPacked by: Royal Spice Mills, Khari Baoli, Old Delhi 110006.\nCustomer Helpline: 011-23998877. No email provided."
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "Packed by: Royal Spice Mills, Khari Baoli, Old Delhi 110006.",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (110006).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "Royal Shahi Garam Masala (Blended Spice)",
+        "explanation": "Compliant: Commodity clearly identified as \"Royal Shahi Garam Masala (Blended Spice)\".",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "category": "Quantity",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Wt: approx 200g",
+        "explanation": "Violation of Rule 12(6): The net quantity contains prohibited qualifying expression \"approx\". Expressions like \"approx\", \"minimum\", \"not less than\" are strictly illegal on pre-packaged goods.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Wt: approx 200g",
+        "explanation": "Compliant: Declared as 200 g using proper SI standard measure.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "category": "Traceability",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Pkd: 03/2026",
+        "explanation": "Compliant: Month and year declared as 03/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "category": "Pricing",
+        "verdict": "PASS",
+        "field": "MRP",
+        "extractedText": "MRP ₹ 110.00 (incl. of all taxes)",
+        "explanation": "Compliant: Valid MRP format with statutory \"inclusive of all taxes\" declaration and currency symbol (₹).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "category": "Consumer Protection",
+        "verdict": "FAIL",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Customer Helpline: 011-23998877. No email provided.",
+        "explanation": "Non-compliant: Consumer Care Email address missing. Rule 6(2) mandates both email and phone contact.",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_7_FONT_HEIGHT",
+        "ruleReference": "Rule 7 (Tables I & II)",
+        "title": "Minimum Numeral Font Height for Net Quantity",
+        "category": "Display",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Numeral bbox height: 45px (~7.6 mm @ 150 DPI)",
+        "explanation": "Compliant: Estimated numeral height of ~7.6 mm meets the minimum prescribed threshold of 2 mm (Rule 7, Table I).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "category": "Legibility",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-013951",
+    "productId": "sample_mrp_violation",
+    "productName": "PureDrop Kachi Ghani Mustard Oil (1000ml)",
+    "category": "Edible Oils",
+    "manufacturer": "PureDrop Agro Foods Ltd.",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_oil_label.svg",
+    "timestamp": "2026-09-17T14:06:53.951Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "NON_COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 10,
+      "passed": 8,
+      "failed": 2,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "PureDrop Kachi Ghani Mustard Oil",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 1000 ml",
+        "value": 1000,
+        "unit": "ml",
+        "prohibitedWord": null,
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP Rs. 185.00",
+        "amount": 185,
+        "currency": "Rs.",
+        "hasTaxes": false,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 240,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg Date: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Mfg by: PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001, India.",
+        "pinCode": "132001",
+        "hasAddressDetails": true,
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Care: Manager, PureDrop Agro, Karnal. Phone: 0184-225588, Email: care@puredropoil.com",
+        "phone": "0184-225588",
+        "email": "care@puredropoil.com",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      },
+      "dimensions": null,
+      "rawText": "PureDrop Kachi Ghani Mustard Oil\nNet Vol: 1000 ml\nMRP Rs. 185.00\nMfg Date: 01/2026\nMfg by: PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001, India.\nCustomer Care: Manager, PureDrop Agro, Karnal. Phone: 0184-225588, Email: care@puredropoil.com"
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "Mfg by: PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001, India.",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (132001).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "PureDrop Kachi Ghani Mustard Oil",
+        "explanation": "Compliant: Commodity clearly identified as \"PureDrop Kachi Ghani Mustard Oil\".",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 1000 ml",
+        "explanation": "Compliant: No prohibited qualifying words (\"approx\", \"minimum\", \"about\") found in net quantity declaration.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "category": "Quantity",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 1000 ml",
+        "explanation": "Violation of Rule 13(1): For liquid volume of 1000 ml or more, the net volume MUST be declared in liters (\"L\" or \"l\"), not in milliliters (\"1000 ml\" declared).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "category": "Traceability",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Mfg Date: 01/2026",
+        "explanation": "Compliant: Month and year declared as 01/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "category": "Pricing",
+        "verdict": "FAIL",
+        "field": "MRP",
+        "extractedText": "MRP Rs. 185.00",
+        "explanation": "Non-compliant with Rule 2(m): Missing statutory wording \"(inclusive of all taxes)\" or \"(incl. of all taxes)\" required by Rule 2(m).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 240,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "category": "Consumer Protection",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Customer Care: Manager, PureDrop Agro, Karnal. Phone: 0184-225588, Email: care@puredropoil.com",
+        "explanation": "Compliant: Full consumer care grievance mechanism provided (Helpline: 0184-225588, Email: care@puredropoil.com).",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_5_STANDARD_PACK",
+        "ruleReference": "Rule 5 read with Second Schedule",
+        "title": "Second Schedule Standard Pack Size Compliance",
+        "category": "Standardization",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 1000 ml [Matches Second Schedule size for Edible Oils]",
+        "explanation": "Compliant: Declared size 1000 ml is an approved standard size under Second Schedule.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_7_FONT_HEIGHT",
+        "ruleReference": "Rule 7 (Tables I & II)",
+        "title": "Minimum Numeral Font Height for Net Quantity",
+        "category": "Display",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Numeral bbox height: 45px (~7.6 mm @ 150 DPI)",
+        "explanation": "Compliant: Estimated numeral height of ~7.6 mm meets the minimum prescribed threshold of 4 mm (Rule 7, Table I).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "category": "Legibility",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-969819",
+    "productId": "sample_compliant_tea",
+    "productName": "Golden Leaf CTC Tea (250g)",
+    "category": "Tea",
+    "manufacturer": "Apex Beverages India Pvt. Ltd.",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_tea_label.svg",
+    "timestamp": "2026-09-17T14:06:09.819Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 10,
+      "passed": 10,
+      "failed": 0,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "Golden Leaf Premium CTC Black Tea",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Qty: 250 g",
+        "value": 250,
+        "unit": "g",
+        "prohibitedWord": null,
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 145.00 (inclusive of all taxes)",
+        "amount": 145,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd Date: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured & Packed by: Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020, India.",
+        "pinCode": "110020",
+        "hasAddressDetails": true,
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "For complaints, contact: Consumer Care Officer, Apex Beverages, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in",
+        "phone": "1800-11-4433",
+        "email": "customercare@apextea.in",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      },
+      "dimensions": null,
+      "rawText": "Golden Leaf Premium CTC Black Tea\nNet Qty: 250 g\nMRP ₹ 145.00 (inclusive of all taxes)\nPkd Date: 02/2026\nManufactured & Packed by: Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020, India.\nFor complaints, contact: Consumer Care Officer, Apex Beverages, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in"
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "Manufactured & Packed by: Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020, India.",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (110020).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "category": "Identity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "Golden Leaf Premium CTC Black Tea",
+        "explanation": "Compliant: Commodity clearly identified as \"Golden Leaf Premium CTC Black Tea\".",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Qty: 250 g",
+        "explanation": "Compliant: No prohibited qualifying words (\"approx\", \"minimum\", \"about\") found in net quantity declaration.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "category": "Quantity",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Qty: 250 g",
+        "explanation": "Compliant: Declared as 250 g using proper SI standard measure.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "category": "Traceability",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Pkd Date: 02/2026",
+        "explanation": "Compliant: Month and year declared as 02/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "category": "Pricing",
+        "verdict": "PASS",
+        "field": "MRP",
+        "extractedText": "MRP ₹ 145.00 (inclusive of all taxes)",
+        "explanation": "Compliant: Valid MRP format with statutory \"inclusive of all taxes\" declaration and currency symbol (₹).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "category": "Consumer Protection",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "For complaints, contact: Consumer Care Officer, Apex Beverages, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in",
+        "explanation": "Compliant: Full consumer care grievance mechanism provided (Helpline: 1800-11-4433, Email: customercare@apextea.in).",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_5_STANDARD_PACK",
+        "ruleReference": "Rule 5 read with Second Schedule",
+        "title": "Second Schedule Standard Pack Size Compliance",
+        "category": "Standardization",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Qty: 250 g [Matches Second Schedule size for Tea]",
+        "explanation": "Compliant: Declared size 250 g is an approved standard size under Second Schedule.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_7_FONT_HEIGHT",
+        "ruleReference": "Rule 7 (Tables I & II)",
+        "title": "Minimum Numeral Font Height for Net Quantity",
+        "category": "Display",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Numeral bbox height: 45px (~7.6 mm @ 150 DPI)",
+        "explanation": "Compliant: Estimated numeral height of ~7.6 mm meets the minimum prescribed threshold of 4 mm (Rule 7, Table I).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "category": "Legibility",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-2026-001",
+    "productId": "sample_compliant_tea",
+    "productName": "Golden Leaf CTC Tea (250g)",
+    "category": "Tea",
+    "manufacturer": "Apex Beverages India Pvt. Ltd.",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_tea_label.svg",
+    "timestamp": "2026-09-17T10:15:00.000Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 9,
+      "passed": 9,
+      "failed": 0,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "Golden Leaf Premium CTC Black Tea",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Qty: 250 g",
+        "value": 250,
+        "unit": "g",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 145.00 (inclusive of all taxes)",
+        "amount": 145,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd Date: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured & Packed by: Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020, India.",
+        "pinCode": "110020",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "For complaints, contact: Consumer Care Officer, Apex Beverages, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in",
+        "phone": "1800-11-4433",
+        "email": "customercare@apextea.in",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      }
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "Apex Beverages India Pvt. Ltd., Plot No. 44, Okhla Industrial Area, Phase III, New Delhi 110020",
+        "explanation": "Compliant: Full manufacturer/packer details declared with postal PIN code (110020).",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "Golden Leaf Premium CTC Black Tea",
+        "explanation": "Compliant: Commodity clearly identified.",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Qty: 250 g",
+        "explanation": "Compliant: No prohibited qualifying words found.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Qty: 250 g",
+        "explanation": "Compliant: Declared as 250 g using proper SI standard measure.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Pkd Date: 02/2026",
+        "explanation": "Compliant: Month and year declared as 02/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "verdict": "PASS",
+        "field": "MRP",
+        "extractedText": "MRP ₹ 145.00 (inclusive of all taxes)",
+        "explanation": "Compliant: Valid MRP format with statutory 'inclusive of all taxes' declaration.",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Consumer Care Officer, Plot 44 Okhla, New Delhi. Tel: 1800-11-4433, Email: customercare@apextea.in",
+        "explanation": "Compliant: Full consumer care grievance mechanism provided.",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      },
+      {
+        "ruleId": "RULE_5_STANDARD_PACK",
+        "ruleReference": "Rule 5 read with Second Schedule",
+        "title": "Second Schedule Standard Pack Size Compliance",
+        "verdict": "PASS",
+        "field": "NET_QUANTITY",
+        "extractedText": "250 g [Matches Second Schedule size for Tea]",
+        "explanation": "Compliant: Declared size 250 g is an approved standard size under Second Schedule.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_9_4_LANGUAGE",
+        "ruleReference": "Rule 9(4)",
+        "title": "Official Language Requirement (Hindi / English)",
+        "verdict": "PASS",
+        "field": "LANGUAGE",
+        "extractedText": "English & Devanagari (Hindi) detected",
+        "explanation": "Compliant with Rule 9(4): Mandatory declarations are rendered in Hindi and English.",
+        "bbox": null
+      }
+    ]
+  },
+  {
+    "id": "SCAN-2026-002",
+    "productId": "sample_mrp_violation",
+    "productName": "PureDrop Kachi Ghani Mustard Oil (1000ml)",
+    "category": "Edible Oils",
+    "manufacturer": "PureDrop Agro Foods Ltd.",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_oil_label.svg",
+    "timestamp": "2026-09-17T11:30:00.000Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "NON_COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 9,
+      "passed": 7,
+      "failed": 2,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "PureDrop Kachi Ghani Mustard Oil",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 1000 ml",
+        "value": 1000,
+        "unit": "ml",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP Rs. 185.00",
+        "amount": 185,
+        "currency": "Rs.",
+        "hasTaxes": false,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 240,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg Date: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Mfg by: PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001, India.",
+        "pinCode": "132001",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Care: Manager, PureDrop Agro, Karnal. Phone: 0184-225588, Email: care@puredropoil.com",
+        "phone": "0184-225588",
+        "email": "care@puredropoil.com",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      }
+    },
+    "results": [
+      {
+        "ruleId": "RULE_6_1_A",
+        "ruleReference": "Rule 6(1)(a) read with Rule 10",
+        "title": "Manufacturer / Packer / Importer Details",
+        "verdict": "PASS",
+        "field": "MANUFACTURER",
+        "extractedText": "PureDrop Agro Foods Ltd., G.T. Road, Karnal, Haryana 132001",
+        "explanation": "Compliant: Full manufacturer details declared.",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_B",
+        "ruleReference": "Rule 6(1)(b)",
+        "title": "Common / Generic Name of Commodity",
+        "verdict": "PASS",
+        "field": "COMMODITY_NAME",
+        "extractedText": "PureDrop Kachi Ghani Mustard Oil",
+        "explanation": "Compliant: Commodity clearly identified.",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_C_NET_QTY",
+        "ruleReference": "Rule 6(1)(c) read with Rule 11 & 13",
+        "title": "Net Quantity & Standard SI Unit Compliance",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 1000 ml",
+        "explanation": "Violation of Rule 13(1): For liquid volume of 1000 ml or more, the net volume MUST be declared in liters ('L' or 'l'), not in milliliters ('1000 ml' declared).",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 220,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_E_MRP",
+        "ruleReference": "Rule 6(1)(e) read with Rule 2(m)",
+        "title": "Maximum Retail Price (MRP) Statutory Format",
+        "verdict": "FAIL",
+        "field": "MRP",
+        "extractedText": "MRP Rs. 185.00",
+        "explanation": "Non-compliant with Rule 2(m): Missing statutory wording '(inclusive of all taxes)' or '(incl. of all taxes)' required by Rule 2(m).",
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 240,
+          "h": 40
+        }
+      },
+      {
+        "ruleId": "RULE_6_1_D_DATE",
+        "ruleReference": "Rule 6(1)(d)",
+        "title": "Month & Year of Manufacture / Packing / Import",
+        "verdict": "PASS",
+        "field": "MFG_DATE",
+        "extractedText": "Mfg Date: 01/2026",
+        "explanation": "Compliant: Month and year declared as 01/2026.",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 220,
+          "h": 35
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "verdict": "PASS",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Customer Care: Manager, PureDrop Agro. Phone: 0184-225588, Email: care@puredropoil.com",
+        "explanation": "Compliant: Consumer care details provided.",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      }
+    ]
+  },
+  {
+    "id": "SCAN-2026-003",
+    "productId": "sample_prohibited_words",
+    "productName": "Royal Shahi Garam Masala (approx 200g)",
+    "category": "Spices",
+    "manufacturer": "Royal Spice Mills",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_masala_label.svg",
+    "timestamp": "2026-09-17T12:45:00.000Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "NON_COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 8,
+      "passed": 6,
+      "failed": 2,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "Royal Shahi Garam Masala (Blended Spice)",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Wt: approx 200g",
+        "value": 200,
+        "unit": "g",
+        "prohibitedWord": "approx",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 110.00 (incl. of all taxes)",
+        "amount": 110,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Pkd: 03/2026",
+        "month": "03",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Packed by: Royal Spice Mills, Khari Baoli, Old Delhi 110006.",
+        "pinCode": "110006",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Customer Helpline: 011-23998877",
+        "phone": "011-23998877",
+        "email": null,
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.9
+      }
+    },
+    "results": [
+      {
+        "ruleId": "RULE_12_6_PROHIBITED",
+        "ruleReference": "Rule 12(6)",
+        "title": "Prohibition of Misleading Quantity Qualifiers",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Wt: approx 200g",
+        "explanation": "Violation of Rule 12(6): The net quantity contains prohibited qualifying expression 'approx'. Expressions like 'approx', 'minimum', 'about' are strictly illegal.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 260,
+          "h": 45
+        }
+      },
+      {
+        "ruleId": "RULE_6_2_CONSUMER_CARE",
+        "ruleReference": "Rule 6(2)",
+        "title": "Consumer Care Redressal Mechanism",
+        "verdict": "FAIL",
+        "field": "CONSUMER_CARE",
+        "extractedText": "Customer Helpline: 011-23998877. No email provided.",
+        "explanation": "Non-compliant: Consumer Care Email address missing. Rule 6(2) mandates both email and telephone contact.",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        }
+      }
+    ]
+  },
+  {
+    "id": "SCAN-2026-004",
+    "productId": "sample_non_standard_pack",
+    "productName": "UltraClean Detergent Powder (380g)",
+    "category": "Detergent Powder",
+    "manufacturer": "Zenith Homecare Products",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_detergent_label.svg",
+    "timestamp": "2026-09-17T14:10:00.000Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "COMPLIANT",
+    "summary": {
+      "totalRulesChecked": 8,
+      "passed": 7,
+      "failed": 1,
+      "review": 0,
+      "exempt": 0
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "UltraClean Concentrated Detergent Powder",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Weight: 380 g",
+        "value": 380,
+        "unit": "g",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 75.00 (inclusive of all taxes)",
+        "amount": 75,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 380,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 02/2026",
+        "month": "02",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 200,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "Manufactured by: Zenith Homecare Products, GIDC Naroda, Ahmedabad, Gujarat 382330.",
+        "pinCode": "382330",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Care Cell: Toll Free 1800-200-9911, Email: support@zenithhomecare.com",
+        "phone": "1800-200-9911",
+        "email": "support@zenithhomecare.com",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      }
+    },
+    "results": [
+      {
+        "ruleId": "RULE_5_STANDARD_PACK",
+        "ruleReference": "Rule 5 read with Second Schedule",
+        "title": "Second Schedule Standard Pack Size Compliance",
+        "verdict": "FAIL",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Weight: 380 g [Standard sizes for Detergent Powder: 200, 500, 700, 1000, 1500 g]",
+        "explanation": "Violation of Rule 5 & Second Schedule: 380 g is NOT a prescribed standard size for Detergent Powder. Package lacks required 'Non-standard pack' disclaimer.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 240,
+          "h": 45
+        }
+      }
+    ],
+    "remarks": "Tested on-site, label approved.",
+    "manualOverride": {
+      "previousStatus": "NON_COMPLIANT",
+      "newStatus": "COMPLIANT",
+      "reason": "Officer physical measurement verified with calibrated micrometer",
+      "byUser": "Inspector R. Sharma",
+      "byUserId": "usr_inspector_01",
+      "timestamp": "2026-09-17T14:07:17.004Z"
+    }
+  },
+  {
+    "id": "SCAN-2026-005",
+    "productId": "sample_exempt_sachet",
+    "productName": "SatinGlow Herbal Shampoo Sachet (8ml)",
+    "category": "Cosmetics / Shampoo",
+    "manufacturer": "BioFlora Wellness India",
+    "isPDP": true,
+    "imageUrl": "/samples/sample_shampoo_label.svg",
+    "timestamp": "2026-09-17T15:20:00.000Z",
+    "inspectorId": "usr_inspector_01",
+    "inspectorName": "Inspector R. Sharma",
+    "overallStatus": "EXEMPT",
+    "summary": {
+      "totalRulesChecked": 8,
+      "passed": 7,
+      "failed": 0,
+      "review": 0,
+      "exempt": 1
+    },
+    "extractedFields": {
+      "commodityName": {
+        "text": "SatinGlow Silky Herbal Shampoo",
+        "bbox": {
+          "x": 60,
+          "y": 65,
+          "w": 480,
+          "h": 50
+        },
+        "confidence": 0.98
+      },
+      "netQuantity": {
+        "text": "Net Vol: 8 ml",
+        "value": 8,
+        "unit": "ml",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        },
+        "confidence": 0.99
+      },
+      "mrp": {
+        "text": "MRP ₹ 3.00 (incl. of all taxes)",
+        "amount": 3,
+        "currency": "₹",
+        "hasTaxes": true,
+        "bbox": {
+          "x": 60,
+          "y": 340,
+          "w": 320,
+          "h": 40
+        },
+        "confidence": 0.97
+      },
+      "mfgDate": {
+        "text": "Mfg: 01/2026",
+        "month": "01",
+        "year": "2026",
+        "bbox": {
+          "x": 60,
+          "y": 395,
+          "w": 180,
+          "h": 35
+        },
+        "confidence": 0.96
+      },
+      "manufacturer": {
+        "text": "BioFlora Wellness India, Baddi, Solan, Himachal Pradesh 173205.",
+        "pinCode": "173205",
+        "bbox": {
+          "x": 60,
+          "y": 450,
+          "w": 480,
+          "h": 65
+        },
+        "confidence": 0.95
+      },
+      "consumerCare": {
+        "text": "Feedback: care@bioflora.in, Helpline: 01795-244111",
+        "phone": "01795-244111",
+        "email": "care@bioflora.in",
+        "bbox": {
+          "x": 60,
+          "y": 530,
+          "w": 480,
+          "h": 60
+        },
+        "confidence": 0.94
+      }
+    },
+    "results": [
+      {
+        "ruleId": "RULE_26_EXEMPTION",
+        "ruleReference": "Rule 26",
+        "title": "Statutory Exemptions Check",
+        "verdict": "EXEMPT",
+        "field": "NET_QUANTITY",
+        "extractedText": "Net Vol: 8 ml",
+        "explanation": "Statutory Exemption Applied: Package net quantity (8ml) is ≤ 10ml. Under Rule 26(a), small packages are exempt from standard sizes and detailed retail price breakdown.",
+        "bbox": {
+          "x": 60,
+          "y": 280,
+          "w": 180,
+          "h": 45
+        }
+      }
+    ]
+  }
+]
