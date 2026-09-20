@@ -13,6 +13,11 @@ function classifyExtractedText(ocrBlocks, defaultCategory = 'General') {
     mfgDate: null,
     manufacturer: null,
     consumerCare: null,
+    bestBefore: null,
+    expiry: null,
+    countryOfOrigin: null,
+    batchNumber: null,
+    address: null,
     dimensions: null,
     rawText: allText
   };
@@ -118,6 +123,21 @@ function classifyExtractedText(ocrBlocks, defaultCategory = 'General') {
       confidence: careBlock.confidence || 0.92
     };
   }
+
+  const bestBeforeBlock = ocrBlocks.find(b => /\b(best\s*before|use\s*before|expiry|expires|exp\.?\s*date)\b/i.test(b.text));
+  if (bestBeforeBlock) {
+    const field = { text: bestBeforeBlock.text.trim(), bbox: bestBeforeBlock.bbox, confidence: bestBeforeBlock.confidence || 0.9 };
+    if (/\b(expiry|expires|exp\.?\s*date)\b/i.test(bestBeforeBlock.text)) extracted.expiry = field;
+    else extracted.bestBefore = field;
+  }
+
+  const originBlock = ocrBlocks.find(b => /\b(country\s*of\s*origin|made\s*in|product\s*of)\b/i.test(b.text));
+  if (originBlock) extracted.countryOfOrigin = { text: originBlock.text.trim(), bbox: originBlock.bbox, confidence: originBlock.confidence || 0.9 };
+
+  const batchBlock = ocrBlocks.find(b => /\b(batch|lot|lot\s*no\.?|batch\s*no\.?)\b/i.test(b.text));
+  if (batchBlock) extracted.batchNumber = { text: batchBlock.text.trim(), bbox: batchBlock.bbox, confidence: batchBlock.confidence || 0.9 };
+
+  if (extracted.manufacturer) extracted.address = extracted.manufacturer;
 
   // 6. Common / Generic Commodity Name (Rule 6(1)(b))
   const nameBlock = ocrBlocks.find(b => 

@@ -116,19 +116,14 @@ async function processImageOCR(imagePath, sampleData = null) {
     }
   }
 
-  // Fallback heuristic simulation if OCR engine is offline or unavailable
+  // Never fabricate label content when OCR is unavailable. The caller can
+  // distinguish an unreadable image from a declaration that was verified.
   return {
     success: true,
-    blocks: [
-      { text: "Sample Commodity Pack", bbox: { x: 50, y: 50, w: 300, h: 40 }, confidence: 0.85 },
-      { text: "Net Qty: 500 g", bbox: { x: 50, y: 120, w: 180, h: 35 }, confidence: 0.90 },
-      { text: "MRP Rs. 95.00 (inclusive of all taxes)", bbox: { x: 50, y: 180, w: 320, h: 35 }, confidence: 0.88 },
-      { text: "Mfg Date: 02/2026", bbox: { x: 50, y: 240, w: 180, h: 30 }, confidence: 0.85 },
-      { text: "Mfg by: ABC Products Ltd, Industrial Estate, Delhi 110020", bbox: { x: 50, y: 300, w: 400, h: 50 }, confidence: 0.82 },
-      { text: "Customer Care: care@abcproducts.com Tel: 1800-11-2233", bbox: { x: 50, y: 380, w: 420, h: 45 }, confidence: 0.84 }
-    ],
-    rawText: "Sample Commodity Pack\nNet Qty: 500 g\nMRP Rs. 95.00 (inclusive of all taxes)\nMfg Date: 02/2026\nMfg by: ABC Products Ltd, Industrial Estate, Delhi 110020\nCustomer Care: care@abcproducts.com Tel: 1800-11-2233",
-    source: 'heuristic-fallback'
+    blocks: [],
+    rawText: '',
+    source: 'unavailable',
+    warning: 'Unable to verify from the uploaded image.'
   };
 }
 
