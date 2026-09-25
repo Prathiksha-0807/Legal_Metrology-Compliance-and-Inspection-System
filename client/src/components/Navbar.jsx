@@ -1,16 +1,17 @@
 import React from 'react';
-import { 
-  ScanLine, 
-  FileText, 
-  BarChart3, 
-  Settings2, 
-  ShieldCheck, 
-  UserCheck, 
-  BookOpen, 
+import {
+  ScanLine,
+  FileText,
+  BarChart3,
+  Settings2,
+  ShieldCheck,
+  UserCheck,
+  LogOut,
+  BookOpen,
   Scale
 } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchRole }) {
+export default function Navbar({ activeTab, setActiveTab, currentUser, onLogout }) {
   return (
     <header>
       {/* Official Government / Legal Metrology Header */}
@@ -22,15 +23,11 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           <div>
             <div className="brand-title">
               Legal Metrology Compliance Inspector
-              <span className="badge badge-info" style={{ textTransform: 'none' }}>Rule Engine 2011</span>
-            </div>
-            <div className="brand-subtitle">
-              Government Enforcement Portal • Legal Metrology (Packaged Commodities) Rules, 2011 • PS 26034 Prototype
             </div>
           </div>
         </div>
 
-        {/* User Identity & Role Switcher */}
+        {/* Signed-in user identity */}
         <div className="header-controls">
           <div className="role-switcher-card">
             <UserCheck size={16} className={currentUser.role === 'ADMIN' ? 'text-amber-400' : 'text-blue-400'} />
@@ -40,12 +37,14 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
                 Role: <strong style={{ color: currentUser.role === 'ADMIN' ? '#f59e0b' : '#60a5fa' }}>{currentUser.role}</strong> ({currentUser.badgeNumber || 'Officer'})
               </div>
             </div>
-            <button 
-              className="role-toggle-btn"
-              onClick={() => onSwitchRole(currentUser.role === 'ADMIN' ? 'INSPECTOR' : 'ADMIN')}
-              title="Toggle between Inspector & Admin role to test role permissions"
+            <button
+              className="logout-btn"
+              type="button"
+              onClick={onLogout}
+              title="Log out of the portal"
             >
-              Switch to {currentUser.role === 'ADMIN' ? 'Inspector' : 'Admin'}
+              <LogOut size={16} aria-hidden="true" />
+              <span>Logout</span>
             </button>
           </div>
         </div>
@@ -53,7 +52,7 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
 
       {/* Main Tab Navigation */}
       <nav className="nav-tab-bar">
-        <button 
+        <button
           className={`nav-tab ${activeTab === 'scanner' ? 'active' : ''}`}
           onClick={() => setActiveTab('scanner')}
         >
@@ -61,7 +60,7 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           <span>New Inspection &amp; Scan</span>
         </button>
 
-        <button 
+        <button
           className={`nav-tab ${activeTab === 'report' ? 'active' : ''}`}
           onClick={() => setActiveTab('report')}
         >
@@ -69,7 +68,7 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           <span>Active Audit Report</span>
         </button>
 
-        <button 
+        <button
           className={`nav-tab ${activeTab === 'history' ? 'active' : ''}`}
           onClick={() => setActiveTab('history')}
         >
@@ -77,7 +76,7 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           <span>Repository &amp; Records</span>
         </button>
 
-        <button 
+        <button
           className={`nav-tab ${activeTab === 'dashboard' ? 'active' : ''}`}
           onClick={() => setActiveTab('dashboard')}
         >
@@ -85,7 +84,7 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           <span>Enforcement Dashboard</span>
         </button>
 
-        <button 
+        <button
           className={`nav-tab ${activeTab === 'rules' ? 'active' : ''}`}
           onClick={() => setActiveTab('rules')}
         >
@@ -96,13 +95,15 @@ export default function Navbar({ activeTab, setActiveTab, currentUser, onSwitchR
           )}
         </button>
 
-        <button 
-          className={`nav-tab ${activeTab === 'guide' ? 'active' : ''}`}
-          onClick={() => setActiveTab('guide')}
-        >
-          <BookOpen size={18} />
-          <span>Architecture &amp; PS Guide</span>
-        </button>
+        {currentUser.role === 'ADMIN' && (
+          <button
+            className={`nav-tab ${activeTab === 'guide' ? 'active' : ''}`}
+            onClick={() => setActiveTab('guide')}
+          >
+            <BookOpen size={18} />
+            <span>Architecture &amp; PS Guide</span>
+          </button>
+        )}
       </nav>
     </header>
   );

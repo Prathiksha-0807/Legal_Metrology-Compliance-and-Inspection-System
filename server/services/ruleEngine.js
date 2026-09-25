@@ -230,7 +230,20 @@ function evaluateCompliance(extractedFields, options = {}) {
   const rule61d = rules.find(r => r.id === 'RULE_6_1_D_DATE');
   if (rule61d && rule61d.enabled) {
     const mfg = extractedFields.mfgDate;
-    if (!mfg) {
+    const dateExempt = (rule61d.parameters.allowedExemptCategories || []).some(item => category.toLowerCase().includes(item));
+    if (dateExempt) {
+      results.push({
+        ruleId: 'RULE_6_1_D_DATE',
+        ruleReference: rule61d.ruleReference,
+        title: rule61d.title,
+        category: rule61d.category,
+        verdict: schedCategory ? 'REVIEW' : 'EXEMPT',
+        field: 'MFG_DATE',
+        extractedText: mfg ? mfg.text : 'Not applicable',
+        explanation: `Not applicable for the selected category (${category}) under the configured exemption list.`,
+        bbox: mfg ? mfg.bbox : null
+      });
+    } else if (!mfg) {
       results.push({
         ruleId: 'RULE_6_1_D_DATE',
         ruleReference: rule61d.ruleReference,
@@ -394,6 +407,20 @@ function evaluateCompliance(extractedFields, options = {}) {
           bbox: netQty.bbox
         });
       }
+    } else {
+      results.push({
+        ruleId: 'RULE_5_STANDARD_PACK',
+        ruleReference: rule5.ruleReference,
+        title: rule5.title,
+        category: rule5.category,
+        verdict: 'EXEMPT',
+        field: 'NET_QUANTITY',
+        extractedText: 'Not applicable',
+        explanation: schedCategory
+          ? 'Not detected from the uploaded image; standard size compliance cannot be assessed reliably.'
+          : `Not applicable because ${category} has no configured Second Schedule mapping in this system.`,
+        bbox: null
+      });
     }
   }
 
@@ -428,6 +455,18 @@ function evaluateCompliance(extractedFields, options = {}) {
         : `Flagged for Officer Gauge Measurement: Estimated numeral height (~${estHeightMm} mm) may be below the required ${requiredHeightMm} mm for ${qtyGrams}g package. Officer physical scale verification recommended.`,
       bbox: netQty.bbox
     });
+  } else if (rule7 && rule7.enabled) {
+    results.push({
+      ruleId: 'RULE_7_FONT_HEIGHT',
+      ruleReference: rule7.ruleReference,
+      title: rule7.title,
+      category: rule7.category,
+      verdict: 'REVIEW',
+      field: 'NET_QUANTITY',
+      extractedText: 'Not detected',
+      explanation: 'Unable to verify from the uploaded image because a quantity bounding box was not available.',
+      bbox: null
+    });
   }
 
   // 11. Rule 9(4): Language Compliance
@@ -442,19 +481,37 @@ function evaluateCompliance(extractedFields, options = {}) {
       ruleReference: rule94.ruleReference,
       title: rule94.title,
       category: rule94.category,
-      verdict: (hasEnglish || hasHindi) ? 'PASS' : 'FAIL',
+      verdict: (hasEnglish || hasHindi) ? 'PASS' : 'REVIEW',
       field: 'LANGUAGE',
       extractedText: hasHindi ? 'English & Devanagari (Hindi) detected' : 'English detected',
       explanation: (hasEnglish || hasHindi)
         ? `Compliant with Rule 9(4): Mandatory declarations are rendered in ${hasHindi ? 'Hindi (Devanagari) and English' : 'English'}.`
-        : 'Violation of Rule 9(4): Mandatory declarations must be in Hindi (Devanagari script) or English.',
+        : 'Unable to verify from the uploaded image because no readable declaration text was returned by OCR.',
       bbox: null
     });
   }
 
+  // Normalize machine verdicts for the report contract. OCR uncertainty is
+  // never treated as a legal violation.
+  results.forEach(result => {
+    if (result.verdict === 'FAIL' && /^(NOT FOUND|Not detected)$/i.test(result.extractedText || '')) {
+      result.verdict = 'NOT_DETECTED';
+      result.status = 'NOT_DETECTED';
+      result.explanation = 'Not detected from the uploaded image. Improve image quality or verify this declaration manually.';
+    } else if (result.verdict === 'PASS') {
+      result.status = 'CORRECT';
+    } else if (result.verdict === 'FAIL') {
+      result.status = 'INCORRECT';
+    } else if (result.verdict === 'EXEMPT') {
+      result.status = 'NOT_APPLICABLE';
+    } else if (result.verdict === 'REVIEW') {
+      result.status = 'NOT_DETECTED';
+    }
+  });
+
   // Determine overall status
   const hasFail = results.some(r => r.verdict === 'FAIL');
-  const hasReview = results.some(r => r.verdict === 'REVIEW');
+  const hasReview = results.some(r => r.verdict === 'REVIEW' || r.verdict === 'NOT_DETECTED');
   
   let overallStatus = 'COMPLIANT';
   if (isSmallPackExempt && !hasFail) {
@@ -472,6 +529,11 @@ function evaluateCompliance(extractedFields, options = {}) {
       totalRulesChecked: results.length,
       passed: results.filter(r => r.verdict === 'PASS').length,
       failed: results.filter(r => r.verdict === 'FAIL').length,
+      correct: results.filter(r => r.status === 'CORRECT').length,
+      incorrect: results.filter(r => r.status === 'INCORRECT').length,
+      missing: results.filter(r => r.verdict === 'MISSING').length,
+      notDetected: results.filter(r => r.status === 'NOT_DETECTED').length,
+      notApplicable: results.filter(r => r.status === 'NOT_APPLICABLE').length,
       review: results.filter(r => r.verdict === 'REVIEW').length,
       exempt: results.filter(r => r.verdict === 'EXEMPT').length
     }

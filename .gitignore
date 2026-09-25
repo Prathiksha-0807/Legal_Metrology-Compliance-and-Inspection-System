@@ -1,0 +1,15 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+server/uploads/
+uploads/
+
+dist/
+build/
+
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

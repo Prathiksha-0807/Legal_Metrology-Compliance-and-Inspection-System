@@ -146,7 +146,7 @@ app.post('/api/scan/sample/:sampleId', async (req, res) => {
 
     // Step 1: OCR & Extraction
     const ocrResult = await processImageOCR(null, sample);
-    
+
     // Step 2: NLP Classification
     const extractedFields = classifyExtractedText(ocrResult.blocks, sample.category);
     // Augment with ground truth if sample provides specific values
@@ -178,6 +178,11 @@ app.post('/api/scan/sample/:sampleId', async (req, res) => {
       inspectorName: currentUser.name,
       overallStatus: evaluation.overallStatus,
       summary: evaluation.summary,
+      ocr: {
+        source: ocrResult.source,
+        rawText: ocrResult.rawText,
+        warning: ocrResult.warning || null
+      },
       extractedFields,
       results: evaluation.results
     };
@@ -197,24 +202,54 @@ app.post('/api/scan/sample/:sampleId', async (req, res) => {
 });
 
 // Run scan on custom uploaded images
-app.post('/api/scan/upload', upload.fields([
+const uploadLabelImages = upload.fields([
+  { name: 'labelImages', maxCount: 4 },
   { name: 'pdpImage', maxCount: 1 },
   { name: 'backImage', maxCount: 1 },
   { name: 'otherImage', maxCount: 1 }
-]), async (req, res) => {
+]);
+
+app.post('/api/scan/upload', (req, res, next) => {
+  uploadLabelImages(req, res, err => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const files = req.files || {};
-    const primaryFile = files.pdpImage ? files.pdpImage[0] : (files.backImage ? files.backImage[0] : (files.otherImage ? files.otherImage[0] : null));
+    const uploadedImages = [
+      ...(files.labelImages || []),
+      ...(files.pdpImage || []),
+      ...(files.backImage || []),
+      ...(files.otherImage || [])
+    ];
 
-    if (!primaryFile) {
-      return res.status(400).json({ success: false, error: 'At least one image panel must be uploaded.' });
+    if (uploadedImages.length < 1 || uploadedImages.length > 4) {
+      return res.status(400).json({ success: false, error: 'Upload between 1 and 4 label photos.' });
     }
 
-    const { productName = 'Custom Package', category = 'General', isPDP = 'true' } = req.body;
+    const {
+      productName = 'Custom Package',
+      category = 'General',
+      isPDP = 'true',
+      inspectorId,
+      inspectorName
+    } = req.body;
     const isPDPBool = isPDP === 'true' || isPDP === true;
 
-    // Run OCR
-    const ocrResult = await processImageOCR(primaryFile.path);
+    // Run OCR on every uploaded panel so declarations can be combined across photos.
+    const ocrResults = [];
+    for (const image of uploadedImages) {
+      ocrResults.push(await processImageOCR(image.path));
+    }
+    const ocrResult = {
+      blocks: ocrResults.flatMap(result => result.blocks || []),
+      rawText: ocrResults.map(result => result.rawText).filter(Boolean).join('\n'),
+      source: ocrResults.map(result => result.source).filter(Boolean).join(', '),
+      warning: ocrResults.map(result => result.warning).filter(Boolean).join(' ')
+    };
 
     // Classify text fragments into Legal Metrology fields
     const extractedFields = classifyExtractedText(ocrResult.blocks, category);
@@ -234,12 +269,18 @@ app.post('/api/scan/upload', upload.fields([
       category: category || 'General',
       manufacturer: extractedFields.manufacturer ? extractedFields.manufacturer.text : 'Pending Identification',
       isPDP: isPDPBool,
-      imageUrl: `/uploads/${primaryFile.filename}`,
+      imageUrl: `/uploads/${uploadedImages[0].filename}`,
+      imageUrls: uploadedImages.map(image => `/uploads/${image.filename}`),
       timestamp: new Date().toISOString(),
-      inspectorId: currentUser.id,
-      inspectorName: currentUser.name,
+      inspectorId: inspectorId || currentUser.id,
+      inspectorName: inspectorName || currentUser.name,
       overallStatus: evaluation.overallStatus,
       summary: evaluation.summary,
+      ocr: {
+        source: ocrResult.source,
+        rawText: ocrResult.rawText,
+        warning: ocrResult.warning || null
+      },
       extractedFields,
       results: evaluation.results
     };
@@ -267,7 +308,7 @@ app.get('/api/history', (req, res) => {
 
   if (search) {
     const s = search.toLowerCase();
-    scans = scans.filter(item => 
+    scans = scans.filter(item =>
       (item.productName && item.productName.toLowerCase().includes(s)) ||
       (item.manufacturer && item.manufacturer.toLowerCase().includes(s)) ||
       (item.id && item.id.toLowerCase().includes(s))
@@ -307,7 +348,7 @@ app.post('/api/history/:id/override', (req, res) => {
   const prevStatus = scans[index].overallStatus;
   scans[index].overallStatus = newStatus || prevStatus;
   scans[index].remarks = remarks || scans[index].remarks || '';
-  
+
   if (newStatus && newStatus !== prevStatus) {
     scans[index].manualOverride = {
       previousStatus: prevStatus,
@@ -428,7 +469,13 @@ app.get('/api/reports/:id/pdf', (req, res) => {
 
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename="Legal_Metrology_Inspection_${scan.id}.pdf"`);
-  generateCompliancePDF(scan, res);
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  generateCompliancePDF(scan, res, {
+    name: req.query.userName,
+    role: req.query.role
+  });
 });
 
 app.get('/api/reports/:id/json', (req, res) => {
@@ -452,6 +499,15 @@ app.use((req, res, next) => {
     return res.sendFile(indexHtml);
   }
   next();
+});
+
+// Keep API failures JSON so the client can display the actual server error.
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  if (req.path.startsWith('/api')) {
+    return res.status(500).json({ success: false, error: err.message || 'Internal server error.' });
+  }
+  next(err);
 });
 
 // Start Server

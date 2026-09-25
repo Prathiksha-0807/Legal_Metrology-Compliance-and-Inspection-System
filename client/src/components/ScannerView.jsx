@@ -1,32 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Upload, 
-  Sparkles, 
-  Layers, 
-  RotateCw, 
-  Sliders, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Info, 
-  Play, 
+import {
+  Upload,
+  Layers,
+  RotateCw,
+  Sliders,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  Play,
   FileCheck,
   Package
 } from 'lucide-react';
 
-export default function ScannerView({ samples, onScanComplete }) {
-  const [selectedSample, setSelectedSample] = useState(samples[0] || null);
-  const [productName, setProductName] = useState(samples[0]?.name || 'Golden Leaf CTC Tea (250g)');
-  const [category, setCategory] = useState(samples[0]?.category || 'Tea');
+export default function ScannerView({ onScanComplete, currentUser }) {
+  const [productName, setProductName] = useState('');
+  const [category, setCategory] = useState('');
   const [isPDP, setIsPDP] = useState(true);
-  
+  const [photoCount, setPhotoCount] = useState(1);
+
   // Custom upload state
-  const [uploadedFiles, setUploadedFiles] = useState({
-    pdpImage: null,
-    backImage: null,
-    otherImage: null
-  });
-  const [activePreviewUrl, setActivePreviewUrl] = useState(samples[0]?.image || '/samples/sample_tea_label.svg');
-  
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [activePreviewUrl, setActivePreviewUrl] = useState('');
+
   // Preprocessor controls
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
@@ -40,32 +35,18 @@ export default function ScannerView({ samples, onScanComplete }) {
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  // Update selected sample
-  const handleSelectSample = (sample) => {
-    setSelectedSample(sample);
-    setProductName(sample.name);
-    setCategory(sample.category);
-    setIsPDP(sample.isPDP);
-    setActivePreviewUrl(sample.image);
-    setUploadedFiles({ pdpImage: null, backImage: null, otherImage: null });
-    setBrightness(0);
-    setContrast(0);
-    setRotation(0);
-    setIsBinarized(false);
-  };
-
   // Custom file upload
-  const handleFileChange = (e, panelType = 'pdpImage') => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setUploadedFiles(prev => ({ ...prev, [panelType]: file }));
-      setActivePreviewUrl(url);
-      setSelectedSample(null);
-      if (panelType === 'pdpImage') {
-        setIsPDP(true);
-      }
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length !== photoCount) {
+      alert(`Please select exactly ${photoCount} photo${photoCount === 1 ? '' : 's'}.`);
+      e.target.value = '';
+      return;
     }
+
+    setUploadedFiles(files);
+    setActivePreviewUrl(URL.createObjectURL(files[0]));
+    setIsPDP(true);
   };
 
   // Preprocessing Canvas redraw
@@ -100,6 +81,16 @@ export default function ScannerView({ samples, onScanComplete }) {
 
   // Trigger Scan
   const handleRunScan = async () => {
+    if (uploadedFiles.length < 1 || uploadedFiles.length > 4) {
+      alert('Please upload between 1 and 4 label photos.');
+      return;
+    }
+
+    if (uploadedFiles.length !== photoCount) {
+      alert(`Please select exactly ${photoCount} photo${photoCount === 1 ? '' : 's'} before scanning.`);
+      return;
+    }
+
     setIsScanning(true);
 
     try {
@@ -114,29 +105,31 @@ export default function ScannerView({ samples, onScanComplete }) {
 
       setScanStep('Evaluating Legal Metrology Rules (MRP, SI Units, Second Schedule, Font)...');
 
-      let response;
-      if (selectedSample) {
-        // Run sample scan
-        response = await fetch(`/api/scan/sample/${selectedSample.id}`, {
-          method: 'POST'
-        });
-      } else {
-        // Upload custom image
-        const formData = new FormData();
-        if (uploadedFiles.pdpImage) formData.append('pdpImage', uploadedFiles.pdpImage);
-        if (uploadedFiles.backImage) formData.append('backImage', uploadedFiles.backImage);
-        if (uploadedFiles.otherImage) formData.append('otherImage', uploadedFiles.otherImage);
-        formData.append('productName', productName);
-        formData.append('category', category);
-        formData.append('isPDP', String(isPDP));
+      const formData = new FormData();
+      uploadedFiles.forEach(file => formData.append('labelImages', file));
+      formData.append('productName', productName);
+      formData.append('category', category);
+      formData.append('isPDP', String(isPDP));
+      formData.append('inspectorId', currentUser.id);
+      formData.append('inspectorName', currentUser.name);
 
-        response = await fetch('/api/scan/upload', {
-          method: 'POST',
-          body: formData
-        });
+      const response = await fetch('/api/scan/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const responseText = await response.text();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error(`Server returned an unexpected response (${response.status}).`);
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `Scan upload failed (${response.status}).`);
+      }
+
       if (data.success && data.scan) {
         onScanComplete(data.scan);
       } else {
@@ -144,7 +137,7 @@ export default function ScannerView({ samples, onScanComplete }) {
       }
     } catch (err) {
       console.error('Scan execution error:', err);
-      alert('Network or server error during scan execution.');
+      alert(err.message || 'Network or server error during scan execution.');
     } finally {
       setIsScanning(false);
       setScanStep('');
@@ -153,56 +146,7 @@ export default function ScannerView({ samples, onScanComplete }) {
 
   return (
     <div className="animate-fade-in">
-      {/* 1. Preloaded Test Samples Section */}
-      <div style={{ marginBottom: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-          <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <Sparkles size={16} className="text-amber-500" />
-            Instant Test Packages (Preloaded Realistic Test Cases)
-          </h3>
-          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-            Click any package to test specific Legal Metrology compliance scenarios
-          </span>
-        </div>
-
-        <div className="samples-bar">
-          {samples.map(sample => {
-            const isSelected = selectedSample?.id === sample.id;
-            let badgeClass = 'badge-success';
-            let badgeText = 'COMPLIANT';
-            if (sample.expectedVerdict === 'NON_COMPLIANT') {
-              badgeClass = 'badge-danger';
-              badgeText = 'NON-COMPLIANT';
-            } else if (sample.expectedVerdict === 'EXEMPT') {
-              badgeClass = 'badge-info';
-              badgeText = 'RULE 26 EXEMPT';
-            }
-
-            return (
-              <div
-                key={sample.id}
-                className={`sample-chip ${isSelected ? 'selected' : ''}`}
-                onClick={() => handleSelectSample(sample)}
-              >
-                <div style={{ width: '28px', height: '28px', borderRadius: '4px', overflow: 'hidden', background: '#f1f5f9', flexShrink: 0 }}>
-                  <img src={sample.image} alt={sample.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{sample.name}</div>
-                  <div style={{ display: 'flex', gap: '0.35rem', marginTop: '2px' }}>
-                    <span style={{ fontSize: '0.65rem', color: '#64748b' }}>{sample.category}</span>
-                    <span className={`badge ${badgeClass}`} style={{ fontSize: '0.6rem', padding: '0px 4px' }}>
-                      {badgeText}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 2. Main Scan Workstation Grid */}
+      {/* Main Scan Workstation Grid */}
       <div className="grid-2">
         {/* Left Column: Image Canvas & Preprocessing */}
         <div className="card">
@@ -213,10 +157,10 @@ export default function ScannerView({ samples, onScanComplete }) {
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
               <label style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer' }}>
-                <input 
-                  type="checkbox" 
-                  checked={isPDP} 
-                  onChange={(e) => setIsPDP(e.target.checked)} 
+                <input
+                  type="checkbox"
+                  checked={isPDP}
+                  onChange={(e) => setIsPDP(e.target.checked)}
                 />
                 <strong>Principal Display Panel (PDP)</strong>
               </label>
@@ -225,8 +169,8 @@ export default function ScannerView({ samples, onScanComplete }) {
 
           {/* Interactive Preprocessed Canvas */}
           <div className="canvas-wrapper" style={{ minHeight: '440px' }}>
-            <canvas 
-              ref={canvasRef} 
+            <canvas
+              ref={canvasRef}
               style={{ maxWidth: '100%', maxHeight: '420px', objectFit: 'contain' }}
             />
           </div>
@@ -237,7 +181,7 @@ export default function ScannerView({ samples, onScanComplete }) {
               <span style={{ fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#334155' }}>
                 <Sliders size={14} /> Image Preprocessing Tools (FR-1.3)
               </span>
-              <button 
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => { setBrightness(0); setContrast(0); setRotation(0); setIsBinarized(false); }}
               >
@@ -248,26 +192,26 @@ export default function ScannerView({ samples, onScanComplete }) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '0.75rem', alignItems: 'center', fontSize: '0.75rem' }}>
               <div>
                 <label style={{ display: 'block', color: '#64748b', marginBottom: '2px' }}>Brightness: {brightness}%</label>
-                <input 
-                  type="range" min="-50" max="50" value={brightness} 
-                  onChange={(e) => setBrightness(parseInt(e.target.value))} 
+                <input
+                  type="range" min="-50" max="50" value={brightness}
+                  onChange={(e) => setBrightness(parseInt(e.target.value))}
                   style={{ width: '100%' }}
                 />
               </div>
 
               <div>
                 <label style={{ display: 'block', color: '#64748b', marginBottom: '2px' }}>Contrast: {contrast}%</label>
-                <input 
-                  type="range" min="-50" max="50" value={contrast} 
-                  onChange={(e) => setContrast(parseInt(e.target.value))} 
+                <input
+                  type="range" min="-50" max="50" value={contrast}
+                  onChange={(e) => setContrast(parseInt(e.target.value))}
                   style={{ width: '100%' }}
                 />
               </div>
 
               <div>
                 <label style={{ display: 'block', color: '#64748b', marginBottom: '2px' }}>Orientation: {rotation}°</label>
-                <button 
-                  className="btn btn-secondary btn-sm" 
+                <button
+                  className="btn btn-secondary btn-sm"
                   style={{ width: '100%', padding: '0.2rem' }}
                   onClick={() => setRotation((prev) => (prev + 90) % 360)}
                 >
@@ -277,7 +221,7 @@ export default function ScannerView({ samples, onScanComplete }) {
 
               <div>
                 <label style={{ display: 'block', color: '#64748b', marginBottom: '2px' }}>Grayscale / Binarize</label>
-                <button 
+                <button
                   className={`btn btn-sm ${isBinarized ? 'btn-primary' : 'btn-secondary'}`}
                   onClick={() => setIsBinarized(!isBinarized)}
                   style={{ padding: '0.2rem 0.6rem' }}
@@ -305,9 +249,9 @@ export default function ScannerView({ samples, onScanComplete }) {
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
                   Commodity Generic Name / Title:
                 </label>
-                <input 
-                  type="text" 
-                  value={productName} 
+                <input
+                  type="text"
+                  value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   placeholder="e.g. CTC Black Tea, Mustard Oil, Detergent Powder"
                   style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '0.85rem' }}
@@ -318,11 +262,12 @@ export default function ScannerView({ samples, onScanComplete }) {
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
                   Commodity Category (Second Schedule Mapping):
                 </label>
-                <select 
-                  value={category} 
+                <select
+                  value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '0.85rem', background: '#ffffff' }}
                 >
+                  <option value="Food products">Food products</option>
                   <option value="Tea">Tea (Second Schedule Item 4)</option>
                   <option value="Biscuits">Biscuits (Second Schedule Item 2)</option>
                   <option value="Edible Oils">Edible Oils / Ghee (Second Schedule Item 7)</option>
@@ -330,6 +275,11 @@ export default function ScannerView({ samples, onScanComplete }) {
                   <option value="Baby Food">Baby Food / Weaning (Second Schedule Item 1)</option>
                   <option value="Wheat Flour (Atta)">Wheat Flour (Atta) (Second Schedule Item 9)</option>
                   <option value="Cosmetics / Shampoo">Cosmetics / Shampoo (Rule 26 Exemption Test)</option>
+                  <option value="Cosmetics">Cosmetics</option>
+                  <option value="Household products">Household products</option>
+                  <option value="Personal care products">Personal care products</option>
+                  <option value="Electrical/electronic packaged goods">Electrical/electronic packaged goods</option>
+                  <option value="Other packaged commodities">Other packaged commodities</option>
                   <option value="Spices">Spices &amp; Condiments</option>
                   <option value="General">General / Other Packaged Commodity</option>
                 </select>
@@ -338,23 +288,39 @@ export default function ScannerView({ samples, onScanComplete }) {
               {/* Upload custom panels */}
               <div>
                 <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#334155', marginBottom: '4px' }}>
-                  Or Upload Custom Label Image(s):
+                  Upload Label Photos (1 to 4):
                 </label>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
+                <select
+                  value={photoCount}
+                  onChange={(e) => {
+                    const nextCount = Number(e.target.value);
+                    setPhotoCount(nextCount);
+                    setUploadedFiles([]);
+                    setActivePreviewUrl('');
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                  }}
+                  style={{ width: '100%', padding: '0.5rem 0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px', fontSize: '0.85rem', background: '#ffffff', marginBottom: '0.6rem' }}
+                >
+                  {[1, 2, 3, 4].map(count => (
+                    <option key={count} value={count}>{count} photo{count === 1 ? '' : 's'}</option>
+                  ))}
+                </select>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  multiple
                   accept="image/jpeg,image/png,image/webp,image/svg+xml"
-                  onChange={(e) => handleFileChange(e, 'pdpImage')}
+                  onChange={handleFileChange}
                   style={{ display: 'none' }}
                 />
-                
-                <div 
+
+                <div
                   onClick={() => fileInputRef.current?.click()}
-                  style={{ 
-                    border: '2px dashed #cbd5e1', 
-                    borderRadius: '8px', 
-                    padding: '1.25rem', 
-                    textAlign: 'center', 
+                  style={{
+                    border: '2px dashed #cbd5e1',
+                    borderRadius: '8px',
+                    padding: '1.25rem',
+                    textAlign: 'center',
                     cursor: 'pointer',
                     background: '#f8fafc',
                     transition: 'all 0.2s'
@@ -364,10 +330,10 @@ export default function ScannerView({ samples, onScanComplete }) {
                 >
                   <Upload size={24} style={{ margin: '0 auto 0.4rem auto', color: '#64748b' }} />
                   <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#1e293b' }}>
-                    Click to select custom package label photo
+                    Click to select {photoCount} package label photo{photoCount === 1 ? '' : 's'}
                   </div>
                   <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
-                    Supports JPEG, PNG, WEBP (Front PDP, Back or Side panels)
+                    {uploadedFiles.length > 0 ? `${uploadedFiles.length} photo${uploadedFiles.length === 1 ? '' : 's'} selected` : 'Supports JPEG, PNG, WEBP (Front, back or side panels)'}
                   </div>
                 </div>
               </div>
@@ -405,7 +371,7 @@ export default function ScannerView({ samples, onScanComplete }) {
                 </div>
               </div>
             ) : (
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={handleRunScan}
                 style={{ width: '100%', padding: '0.85rem', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}

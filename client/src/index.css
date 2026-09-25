@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --primary: #1e3a8a; /* Deep Enforcement Navy */
+  --primary: #1e3a8a;
+  /* Deep Enforcement Navy */
   --primary-light: #2563eb;
   --primary-dark: #0f172a;
-  --accent: #d97706; /* Legal Gold / Amber */
+  --accent: #d97706;
+  /* Legal Gold / Amber */
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
   --text-primary: #0f172a;
@@ -12,7 +14,7 @@
   --text-muted: #94a3b8;
   --border: #e2e8f0;
   --border-focus: #3b82f6;
-  
+
   --success: #15803d;
   --success-bg: #f0fdf4;
   --success-border: #bbf7d0;
@@ -46,9 +48,20 @@ body {
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-code, pre, .font-mono {
+/* Accessibility scale: keeps the portal readable on high-resolution displays. */
+#root {
+  zoom: 1.5;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+code,
+pre,
+.font-mono {
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -57,7 +70,9 @@ button {
   font-family: inherit;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   font-family: inherit;
 }
 
@@ -66,13 +81,16 @@ input, select, textarea {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
@@ -116,8 +134,15 @@ input, select, textarea {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -125,8 +150,15 @@ input, select, textarea {
 }
 
 @keyframes pulseBorder {
-  0%, 100% { border-color: rgba(37, 99, 235, 0.4); }
-  50% { border-color: rgba(37, 99, 235, 1); }
+
+  0%,
+  100% {
+    border-color: rgba(37, 99, 235, 0.4);
+  }
+
+  50% {
+    border-color: rgba(37, 99, 235, 1);
+  }
 }
 
 .pulsing-border {

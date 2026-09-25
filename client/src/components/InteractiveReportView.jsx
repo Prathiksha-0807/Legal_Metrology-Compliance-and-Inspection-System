@@ -1,39 +1,53 @@
 import React, { useState, useRef } from 'react';
-import { 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
-  Info, 
-  Download, 
-  Printer, 
-  Edit3, 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCcw, 
-  Ruler, 
-  ShieldCheck, 
-  UserCheck, 
+import {
+  CheckCircle2,
+  XCircle,
+  AlertTriangle,
+  Info,
+  Download,
+  Printer,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Ruler,
+  ShieldCheck,
   FileText,
   HelpCircle,
   Clock,
-  ExternalLink
+  ExternalLink,
+  FileCheck,
+  Package
 } from 'lucide-react';
 
-export default function InteractiveReportView({ scan, onUpdateScan, currentUser, onNewScan }) {
+export default function InteractiveReportView({ scan, currentUser, onNewScan }) {
   const [activeFieldKey, setActiveFieldKey] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showRuler, setShowRuler] = useState(false);
   const [hoveredBox, setHoveredBox] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  // Manual Override Form State
-  const [showOverrideModal, setShowOverrideModal] = useState(false);
-  const [overrideStatus, setOverrideStatus] = useState(scan?.overallStatus || 'COMPLIANT');
-  const [overrideReason, setOverrideReason] = useState('Physical measurement verified by officer with calibrated gauge');
-  const [officerRemarks, setOfficerRemarks] = useState(scan?.remarks || '');
-  const [isSubmittingOverride, setIsSubmittingOverride] = useState(false);
-
   const imageContainerRef = useRef(null);
+
+  const notDetectedLabel = (includeIcon = true) => (
+    <span style={{ color: '#d97706', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: 700 }}>
+      {includeIcon && <XCircle size={14} aria-hidden="true" />}
+      Not Detected
+    </span>
+  );
+
+  const statusLabel = (result) => {
+    const label = {
+      PASS: 'Correct',
+      FAIL: 'Incorrect',
+      REVIEW: 'Not Detected',
+      NOT_DETECTED: 'Not Detected',
+      EXEMPT: 'Not Applicable'
+    }[result.verdict] || result.status || result.verdict;
+
+    return label === 'Not Detected' ? notDetectedLabel() : label;
+  };
+
+  const fieldValue = (field) => field?.text || notDetectedLabel();
 
   if (!scan) {
     return (
@@ -55,44 +69,17 @@ export default function InteractiveReportView({ scan, onUpdateScan, currentUser,
     setActiveFieldKey(activeFieldKey === fieldKey ? null : fieldKey);
   };
 
-  // Submit Manual Override
-  const handleSubmitOverride = async (e) => {
-    e.preventDefault();
-    setIsSubmittingOverride(true);
-    try {
-      const res = await fetch(`/api/history/${scan.id}/override`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          newStatus: overrideStatus,
-          reason: overrideReason,
-          remarks: officerRemarks
-        })
-      });
-      const data = await res.json();
-      if (data.success && data.scan) {
-        onUpdateScan(data.scan);
-        setShowOverrideModal(false);
-      }
-    } catch (err) {
-      console.error('Failed submitting manual override:', err);
-      alert('Error updating inspection record.');
-    } finally {
-      setIsSubmittingOverride(false);
-    }
-  };
-
   // Get field result status
   const getFieldStatus = (fieldKey) => {
     if (!scan.results) return 'pass';
-    const match = scan.results.find(r => 
-      r.field === fieldKey || 
+    const match = scan.results.find(r =>
+      r.field === fieldKey ||
       (fieldKey === 'MRP' && r.field === 'MRP') ||
       (fieldKey === 'NET_QUANTITY' && (r.field === 'NET_QUANTITY'))
     );
     if (!match) return 'pass';
     if (match.verdict === 'FAIL') return 'fail';
-    if (match.verdict === 'REVIEW') return 'review';
+    if (match.verdict === 'REVIEW' || match.verdict === 'NOT_DETECTED') return 'review';
     if (match.verdict === 'EXEMPT') return 'exempt';
     return 'pass';
   };
@@ -144,28 +131,19 @@ export default function InteractiveReportView({ scan, onUpdateScan, currentUser,
         </div>
 
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <button 
-            className="btn btn-secondary btn-sm"
-            onClick={() => setShowOverrideModal(true)}
-            title="Inspector manual override or remark logging"
-          >
-            <Edit3 size={14} />
-            Officer Remarks / Override
-          </button>
-
-          <a 
-            href={`/api/reports/${scan.id}/pdf`} 
-            target="_blank" 
+          <a
+            href={`/api/reports/${scan.id}/pdf?userName=${encodeURIComponent(currentUser?.name || scan.inspectorName || 'Officer')}&role=${encodeURIComponent(currentUser?.role || 'INSPECTOR')}&downloadedAt=${Date.now()}`}
+            target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm"
             title="Download official PDF compliance certificate"
           >
             <Download size={14} />
-            Export Official PDF Report
+            Generate Report / Download PDF
           </a>
 
-          <a 
-            href={`/api/reports/${scan.id}/json`} 
+          <a
+            href={`/api/reports/${scan.id}/json`}
             download={`Legal_Metrology_${scan.id}.json`}
             className="btn btn-secondary btn-sm"
             title="Export raw JSON audit data"
@@ -181,13 +159,43 @@ export default function InteractiveReportView({ scan, onUpdateScan, currentUser,
         </div>
       </div>
 
+      <div className="card" style={{ marginBottom: '1.25rem' }}>
+        <div className="card-header">
+          <div className="card-title"><FileCheck size={18} className="text-blue-600" /> Compliance Summary</div>
+          <span className={`badge ${scan.overallStatus === 'NON_COMPLIANT' ? 'badge-danger' : scan.overallStatus === 'COMPLIANT' ? 'badge-success' : 'badge-warning'}`}>
+            {scan.overallStatus === 'COMPLIANT' ? 'COMPLIANT' : scan.overallStatus === 'NON_COMPLIANT' ? 'POTENTIALLY NON-COMPLIANT' : 'NEEDS REVIEW'}
+          </span>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', fontSize: '0.8rem' }}>
+          <div><strong>Total requirements checked</strong><br />{scan.summary?.totalRulesChecked || 0}</div>
+          <div><strong>Correct</strong><br />{scan.summary?.correct ?? scan.summary?.passed ?? 0}</div>
+          <div><strong>Incorrect</strong><br />{scan.summary?.incorrect ?? scan.summary?.failed ?? 0}</div>
+          <div><strong>Missing</strong><br />{scan.summary?.missing || 0}</div>
+          <div><strong>Not Applicable</strong><br />{scan.summary?.notApplicable ?? scan.summary?.exempt ?? 0}</div>
+          <div><strong>{notDetectedLabel()}</strong><br />{scan.summary?.notDetected || 0}</div>
+        </div>
+        {scan.ocr?.warning && <div style={{ marginTop: '0.75rem', color: '#92400e', background: '#fffbeb', padding: '0.6rem', borderRadius: '6px', fontSize: '0.8rem' }}>{scan.ocr.warning}</div>}
+      </div>
+
+      <div className="card" style={{ marginBottom: '1.25rem' }}>
+        <div className="card-header"><div className="card-title"><Package size={18} className="text-blue-600" /> Extracted Product Information</div></div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.6rem', fontSize: '0.8rem' }}>
+          {[
+            ['Product name', scan.extractedFields?.commodityName], ['Manufacturer / packer / importer', scan.extractedFields?.manufacturer],
+            ['Address', scan.extractedFields?.address], ['Net quantity', scan.extractedFields?.netQuantity], ['MRP', scan.extractedFields?.mrp],
+            ['Manufacturing / packing date', scan.extractedFields?.mfgDate], ['Best before', scan.extractedFields?.bestBefore], ['Expiry', scan.extractedFields?.expiry],
+            ['Consumer care', scan.extractedFields?.consumerCare], ['Country of origin', scan.extractedFields?.countryOfOrigin], ['Batch / lot', scan.extractedFields?.batchNumber]
+          ].map(([label, field]) => <div key={label}><strong>{label}</strong><br />{fieldValue(field)}</div>)}
+        </div>
+      </div>
+
       {/* Status Banner */}
-      <div 
-        style={{ 
-          backgroundColor: bannerBg, 
-          color: '#ffffff', 
-          borderRadius: '10px', 
-          padding: '1rem 1.25rem', 
+      <div
+        style={{
+          backgroundColor: bannerBg,
+          color: '#ffffff',
+          borderRadius: '10px',
+          padding: '1rem 1.25rem',
           marginBottom: '1.25rem',
           display: 'flex',
           alignItems: 'center',
@@ -205,358 +213,265 @@ export default function InteractiveReportView({ scan, onUpdateScan, currentUser,
           </div>
         </div>
 
-        {scan.manualOverride && (
-          <div style={{ marginLeft: 'auto', background: 'rgba(0,0,0,0.25)', padding: '0.4rem 0.75rem', borderRadius: '6px', fontSize: '0.75rem' }}>
-            <strong>Manual Override Active:</strong> Changed by {scan.manualOverride.byUser}
-          </div>
-        )}
       </div>
 
       {/* Dual Pane Layout */}
       <div className="grid-2">
         {/* Left Pane: Interactive Label Image Canvas with Bounding Boxes */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="card-header">
-            <div className="card-title">
-              <ShieldCheck size={18} className="text-blue-600" />
-              Interactive Label Inspector &amp; Bounding Boxes (FR-2.1)
-            </div>
-            {/* Zoom & Ruler Controls */}
-            <div style={{ display: 'flex', gap: '0.35rem' }}>
-              <button 
-                className="btn btn-secondary btn-sm"
-                onClick={() => setZoomLevel(prev => Math.min(prev + 0.25, 2.0))}
-                title="Zoom In"
-              >
-                <ZoomIn size={14} />
-              </button>
-              <button 
-                className="btn btn-secondary btn-sm"
-                onClick={() => setZoomLevel(prev => Math.max(prev - 0.25, 0.75))}
-                title="Zoom Out"
-              >
-                <ZoomOut size={14} />
-              </button>
-              <button 
-                className="btn btn-secondary btn-sm"
-                onClick={() => setZoomLevel(1)}
-                title="Reset Zoom"
-              >
-                <RotateCcw size={14} />
-              </button>
-              <button 
-                className={`btn btn-sm ${showRuler ? 'btn-primary' : 'btn-secondary'}`}
-                onClick={() => setShowRuler(!showRuler)}
-                title="Rule 7 Numeral Height Ruler & Scale Tool"
-              >
-                <Ruler size={14} />
-                Rule 7 Calibrator
-              </button>
-            </div>
-          </div>
-
-          <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
-            Click any highlighted bounding box on the label to locate its statutory rule check:
-          </div>
-
-          {/* Canvas Wrapper */}
-          <div 
-            className="canvas-wrapper" 
-            ref={imageContainerRef}
-            style={{ overflow: 'auto', flex: 1, minHeight: '520px', position: 'relative' }}
-          >
-            <div 
-              className="image-canvas-container"
-              style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center', transition: 'transform 0.15s ease' }}
-            >
-              <img 
-                src={scan.imageUrl} 
-                alt={scan.productName} 
-                className="inspection-image"
-              />
-
-              {/* Interactive SVG Bounding Boxes Overlay */}
-              <svg className="overlay-svg" viewBox="0 0 600 680">
-                {fieldBoxes.map((box) => {
-                  const isActive = activeFieldKey === box.key;
-                  return (
-                    <g key={box.key}>
-                      <rect
-                        x={box.bbox.x}
-                        y={box.bbox.y}
-                        width={box.bbox.w}
-                        height={box.bbox.h}
-                        rx="4"
-                        className={`bbox-rect ${box.status} ${isActive ? 'active' : ''}`}
-                        onClick={() => handleBoxClick(box.key)}
-                        onMouseEnter={(e) => {
-                          setHoveredBox(box);
-                          setTooltipPos({ x: box.bbox.x + box.bbox.w / 2, y: box.bbox.y - 10 });
-                        }}
-                        onMouseLeave={() => setHoveredBox(null)}
-                      />
-                      {/* Box Label Tag */}
-                      <text
-                        x={box.bbox.x + 4}
-                        y={box.bbox.y - 4}
-                        fill="#ffffff"
-                        fontSize="9"
-                        fontWeight="bold"
-                        style={{ pointerEvents: 'none', textShadow: '0 1px 2px #000000' }}
-                      >
-                        {box.key}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-
-              {/* Hover Tooltip */}
-              {hoveredBox && (
-                <div 
-                  className="bbox-tooltip"
-                  style={{ 
-                    left: `${tooltipPos.x}px`, 
-                    top: `${tooltipPos.y}px`,
-                    transform: 'translate(-50%, -100%)'
-                  }}
+        <div className="report-column">
+          <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="card-header">
+              <div className="card-title">
+                <ShieldCheck size={18} className="text-blue-600" />
+                Interactive Label Inspector &amp; Bounding Boxes (FR-2.1)
+              </div>
+              {/* Zoom & Ruler Controls */}
+              <div style={{ display: 'flex', gap: '0.35rem' }}>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setZoomLevel(prev => Math.min(prev + 0.25, 2.0))}
+                  title="Zoom In"
                 >
-                  <div style={{ fontWeight: 700, color: '#f8fafc' }}>{hoveredBox.label}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#cbd5e1', marginTop: '2px' }}>
-                    "{hoveredBox.text}"
-                  </div>
-                  <div style={{ fontSize: '0.65rem', marginTop: '4px', textTransform: 'uppercase', fontWeight: 600, color: hoveredBox.status === 'pass' ? '#86efac' : '#fca5a5' }}>
-                    Status: {hoveredBox.status.toUpperCase()}
-                  </div>
-                </div>
-              )}
+                  <ZoomIn size={14} />
+                </button>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setZoomLevel(prev => Math.max(prev - 0.25, 0.75))}
+                  title="Zoom Out"
+                >
+                  <ZoomOut size={14} />
+                </button>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setZoomLevel(1)}
+                  title="Reset Zoom"
+                >
+                  <RotateCcw size={14} />
+                </button>
+                <button
+                  className={`btn btn-sm ${showRuler ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => setShowRuler(!showRuler)}
+                  title="Rule 7 Numeral Height Ruler & Scale Tool"
+                >
+                  <Ruler size={14} />
+                  Rule 7 Calibrator
+                </button>
+              </div>
             </div>
+
+            <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>
+              Click any highlighted bounding box on the label to locate its statutory rule check:
+            </div>
+
+            {/* Canvas Wrapper */}
+            <div
+              className="canvas-wrapper"
+              ref={imageContainerRef}
+              style={{ overflow: 'auto', flex: 1, minHeight: '520px', position: 'relative' }}
+            >
+              <div
+                className="image-canvas-container"
+                style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top center', transition: 'transform 0.15s ease' }}
+              >
+                <img
+                  src={scan.imageUrl}
+                  alt={scan.productName}
+                  className="inspection-image"
+                />
+
+                {/* Interactive SVG Bounding Boxes Overlay */}
+                <svg className="overlay-svg" viewBox="0 0 600 680">
+                  {fieldBoxes.map((box) => {
+                    const isActive = activeFieldKey === box.key;
+                    return (
+                      <g key={box.key}>
+                        <rect
+                          x={box.bbox.x}
+                          y={box.bbox.y}
+                          width={box.bbox.w}
+                          height={box.bbox.h}
+                          rx="4"
+                          className={`bbox-rect ${box.status} ${isActive ? 'active' : ''}`}
+                          onClick={() => handleBoxClick(box.key)}
+                          onMouseEnter={(e) => {
+                            setHoveredBox(box);
+                            setTooltipPos({ x: box.bbox.x + box.bbox.w / 2, y: box.bbox.y - 10 });
+                          }}
+                          onMouseLeave={() => setHoveredBox(null)}
+                        />
+                        {/* Box Label Tag */}
+                        <text
+                          x={box.bbox.x + 4}
+                          y={box.bbox.y - 4}
+                          fill="#ffffff"
+                          fontSize="9"
+                          fontWeight="bold"
+                          style={{ pointerEvents: 'none', textShadow: '0 1px 2px #000000' }}
+                        >
+                          {box.key}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </svg>
+
+                {/* Hover Tooltip */}
+                {hoveredBox && (
+                  <div
+                    className="bbox-tooltip"
+                    style={{
+                      left: `${tooltipPos.x}px`,
+                      top: `${tooltipPos.y}px`,
+                      transform: 'translate(-50%, -100%)'
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, color: '#f8fafc' }}>{hoveredBox.label}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#cbd5e1', marginTop: '2px' }}>
+                      "{hoveredBox.text}"
+                    </div>
+                    <div style={{ fontSize: '0.65rem', marginTop: '4px', textTransform: 'uppercase', fontWeight: 600, color: hoveredBox.status === 'pass' ? '#86efac' : '#fca5a5' }}>
+                      Status: {hoveredBox.status.toUpperCase()}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Rule 7 Numeral Font Height Calibrator Tool Panel */}
+            {showRuler && (
+              <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#eff6ff', borderRadius: '8px', border: '1px solid #bfdbfe', fontSize: '0.75rem' }}>
+                <div style={{ fontWeight: 700, color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
+                  <Ruler size={15} />
+                  Rule 7 Numeral Height Calibration Tool (Table I &amp; II)
+                </div>
+                <div style={{ color: '#334155' }}>
+                  Net Quantity numeral detected bounding box: <strong>{scan.extractedFields?.netQuantity?.bbox?.h || 45} px</strong>.
+                  At calibrated 150 DPI (~5.9 px/mm), estimated physical print height is <strong>~{((scan.extractedFields?.netQuantity?.bbox?.h || 45) * 25.4 / 150).toFixed(1)} mm</strong>.
+                </div>
+                <div style={{ marginTop: '0.35rem', color: '#64748b' }}>
+                  Prescribed minimums: Up to 50g: 1.0mm | 50g to 200g: 2.0mm | 200g to 1kg: 4.0mm | &gt;1kg: 6.0mm.
+                </div>
+              </div>
+            )}
+
+            {/* Legend */}
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '0.75rem', fontSize: '0.75rem', color: '#64748b', justifyContent: 'center' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span style={{ width: '10px', height: '10px', background: '#22c55e', borderRadius: '2px' }}></span> Compliant (Pass)
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span style={{ width: '10px', height: '10px', background: '#ef4444', borderRadius: '2px' }}></span> Non-compliant (Fail)
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span style={{ width: '10px', height: '10px', background: '#f59e0b', borderRadius: '2px' }}></span> Needs Manual Review
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <span style={{ width: '10px', height: '10px', background: '#0ea5e9', borderRadius: '2px' }}></span> Exempt
+              </span>
+            </div>
+
           </div>
 
-          {/* Rule 7 Numeral Font Height Calibrator Tool Panel */}
-          {showRuler && (
-            <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#eff6ff', borderRadius: '8px', border: '1px solid #bfdbfe', fontSize: '0.75rem' }}>
-              <div style={{ fontWeight: 700, color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-                <Ruler size={15} />
-                Rule 7 Numeral Height Calibration Tool (Table I &amp; II)
-              </div>
-              <div style={{ color: '#334155' }}>
-                Net Quantity numeral detected bounding box: <strong>{scan.extractedFields?.netQuantity?.bbox?.h || 45} px</strong>.
-                At calibrated 150 DPI (~5.9 px/mm), estimated physical print height is <strong>~{((scan.extractedFields?.netQuantity?.bbox?.h || 45) * 25.4 / 150).toFixed(1)} mm</strong>.
-              </div>
-              <div style={{ marginTop: '0.35rem', color: '#64748b' }}>
-                Prescribed minimums: Up to 50g: 1.0mm | 50g to 200g: 2.0mm | 200g to 1kg: 4.0mm | &gt;1kg: 6.0mm.
-              </div>
-            </div>
-          )}
-
-          {/* Legend */}
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '0.75rem', fontSize: '0.75rem', color: '#64748b', justifyContent: 'center' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span style={{ width: '10px', height: '10px', background: '#22c55e', borderRadius: '2px' }}></span> Compliant (Pass)
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span style={{ width: '10px', height: '10px', background: '#ef4444', borderRadius: '2px' }}></span> Non-compliant (Fail)
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span style={{ width: '10px', height: '10px', background: '#f59e0b', borderRadius: '2px' }}></span> Needs Manual Review
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span style={{ width: '10px', height: '10px', background: '#0ea5e9', borderRadius: '2px' }}></span> Exempt
-            </span>
+          <div className="card">
+            <div className="card-header"><div className="card-title">Applicable Rules</div></div>
+            {scan.results?.filter(r => r.verdict !== 'EXEMPT').map((r, i) => <div key={i} style={{ padding: '0.55rem 0', borderBottom: '1px solid #e2e8f0', fontSize: '0.78rem' }}><strong>{r.title}</strong><br /><span style={{ color: '#1e3a8a' }}>{r.ruleReference}</span> · {statusLabel(r)}<br /><span style={{ color: '#64748b' }}>{r.explanation}</span></div>)}
           </div>
         </div>
 
         {/* Right Pane: Rule-by-Rule Audit Checklist */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="card-header">
-            <div className="card-title">
-              <FileText size={18} className="text-blue-600" />
-              Rule Compliance Audit Checklist
+        <div className="report-column">
+          <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="card-header">
+              <div className="card-title">
+                <FileText size={18} className="text-blue-600" />
+                Rule Compliance Audit Checklist
+              </div>
+              <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                {scan.summary?.passed || 0} Passed / {scan.summary?.failed || 0} Failed
+              </div>
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-              {scan.summary?.passed || 0} Passed / {scan.summary?.failed || 0} Failed
+
+            {/* Product Particulars Mini Card */}
+            <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '1rem', fontSize: '0.8rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                <div><strong>Commodity:</strong> {scan.productName}</div>
+                <div><strong>Category:</strong> {scan.category}</div>
+                <div><strong>Principal Display Panel:</strong> {scan.isPDP ? 'Yes (Verified)' : 'No'}</div>
+                <div><strong>Inspector:</strong> {currentUser?.name || scan.inspectorName || 'Officer'}</div>
+              </div>
             </div>
-          </div>
 
-          {/* Product Particulars Mini Card */}
-          <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '1rem', fontSize: '0.8rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-              <div><strong>Commodity:</strong> {scan.productName}</div>
-              <div><strong>Category:</strong> {scan.category}</div>
-              <div><strong>Principal Display Panel:</strong> {scan.isPDP ? 'Yes (Verified)' : 'No'}</div>
-              <div><strong>Inspector:</strong> {scan.inspectorName}</div>
-            </div>
-          </div>
+            {/* Rule Item Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', flex: 1, maxHeight: '600px', paddingRight: '0.25rem' }}>
+              {scan.results && scan.results.map((result, idx) => {
+                const isSelected = activeFieldKey === result.field;
+                let badgeStyle = 'badge-success';
+                let verdictIcon = <CheckCircle2 size={16} className="text-emerald-600" />;
 
-          {/* Rule Item Cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', flex: 1, maxHeight: '600px', paddingRight: '0.25rem' }}>
-            {scan.results && scan.results.map((result, idx) => {
-              const isSelected = activeFieldKey === result.field;
-              let badgeStyle = 'badge-success';
-              let verdictIcon = <CheckCircle2 size={16} className="text-emerald-600" />;
-              
-              if (result.verdict === 'FAIL') {
-                badgeStyle = 'badge-danger';
-                verdictIcon = <XCircle size={16} className="text-rose-600" />;
-              } else if (result.verdict === 'REVIEW') {
-                badgeStyle = 'badge-warning';
-                verdictIcon = <AlertTriangle size={16} className="text-amber-600" />;
-              } else if (result.verdict === 'EXEMPT') {
-                badgeStyle = 'badge-info';
-                verdictIcon = <Info size={16} className="text-sky-600" />;
-              }
+                if (result.verdict === 'FAIL') {
+                  badgeStyle = 'badge-danger';
+                  verdictIcon = <XCircle size={16} className="text-rose-600" />;
+                } else if (result.verdict === 'REVIEW' || result.verdict === 'NOT_DETECTED') {
+                  badgeStyle = 'badge-warning';
+                  verdictIcon = <XCircle size={16} style={{ color: '#d97706' }} />;
+                } else if (result.verdict === 'EXEMPT') {
+                  badgeStyle = 'badge-info';
+                  verdictIcon = <Info size={16} className="text-sky-600" />;
+                }
 
-              return (
-                <div 
-                  key={idx}
-                  onClick={() => handleBoxClick(result.field)}
-                  style={{
-                    border: isSelected ? '2px solid #2563eb' : '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    padding: '0.75rem 0.9rem',
-                    background: isSelected ? '#eff6ff' : '#ffffff',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                    boxShadow: isSelected ? 'var(--shadow-sm)' : 'none'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
-                    <div>
-                      <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#1e3a8a', letterSpacing: '0.01em' }}>
-                        {result.ruleReference}
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => handleBoxClick(result.field)}
+                    style={{
+                      border: isSelected ? '2px solid #2563eb' : '1px solid #e2e8f0',
+                      borderRadius: '8px',
+                      padding: '0.75rem 0.9rem',
+                      background: isSelected ? '#eff6ff' : '#ffffff',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s',
+                      boxShadow: isSelected ? 'var(--shadow-sm)' : 'none'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
+                      <div>
+                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#1e3a8a', letterSpacing: '0.01em' }}>
+                          {result.ruleReference}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0f172a' }}>
+                          {result.title}
+                        </div>
                       </div>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0f172a' }}>
-                        {result.title}
-                      </div>
+                      <span className={`badge ${badgeStyle}`}>
+                        {verdictIcon}
+                        {result.verdict}
+                      </span>
                     </div>
-                    <span className={`badge ${badgeStyle}`}>
-                      {verdictIcon}
-                      {result.verdict}
-                    </span>
-                  </div>
 
-                  {/* Extracted Text snippet */}
-                  <div style={{ fontSize: '0.75rem', color: '#475569', background: '#f8fafc', padding: '0.35rem 0.5rem', borderRadius: '4px', border: '1px solid #f1f5f9', margin: '0.35rem 0', fontFamily: 'monospace' }}>
-                    <strong>Extracted Text:</strong> "{result.extractedText || 'NOT FOUND'}"
-                  </div>
+                    {/* Extracted Text snippet */}
+                    <div style={{ fontSize: '0.75rem', color: '#475569', background: '#f8fafc', padding: '0.35rem 0.5rem', borderRadius: '4px', border: '1px solid #f1f5f9', margin: '0.35rem 0', fontFamily: 'monospace' }}>
+                      <strong>Extracted Text:</strong> {result.extractedText ? `"${result.extractedText}"` : notDetectedLabel()}
+                    </div>
 
-                  {/* Legal Explanation */}
-                  <div style={{ fontSize: '0.75rem', color: result.verdict === 'FAIL' ? '#991b1b' : '#334155', lineHeight: 1.4 }}>
-                    {result.explanation}
+                    {/* Legal Explanation */}
+                    <div style={{ fontSize: '0.75rem', color: result.verdict === 'FAIL' ? '#991b1b' : '#334155', lineHeight: 1.4 }}>
+                      {result.explanation}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+
+          </div>
+
+          <div className="card">
+            <div className="card-header"><div className="card-title">Exempt / Not Applicable</div></div>
+            {scan.results?.filter(r => r.verdict === 'EXEMPT').map((r, i) => <div key={i} style={{ padding: '0.55rem 0', borderBottom: '1px solid #e2e8f0', fontSize: '0.78rem' }}><strong>{r.title}</strong><br /><span style={{ color: '#1e3a8a' }}>{r.ruleReference}</span> · Not Applicable<br /><span style={{ color: '#64748b' }}>{r.explanation}</span></div>)}
+            {!scan.results?.some(r => r.verdict === 'EXEMPT') && <div style={{ color: '#64748b', fontSize: '0.8rem' }}>No statutory exemption or category-based exclusion was applied.</div>}
           </div>
         </div>
       </div>
 
-      {/* Manual Override & Officer Remarks Modal */}
-      {showOverrideModal && (
-        <div 
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(15, 23, 42, 0.65)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            backdropFilter: 'blur(3px)'
-          }}
-        >
-          <div className="card" style={{ maxWidth: '520px', width: '90%', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div className="card-header">
-              <div className="card-title">
-                <Edit3 size={18} className="text-blue-600" />
-                Officer Manual Override &amp; Remarks (FR-4.3)
-              </div>
-              <button 
-                onClick={() => setShowOverrideModal(false)}
-                style={{ background: 'none', border: 'none', fontSize: '1.25rem', cursor: 'pointer', color: '#64748b' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmitOverride} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.85rem' }}>
-              <div style={{ background: '#f8fafc', padding: '0.75rem', borderRadius: '6px', border: '1px solid #e2e8f0', fontSize: '0.78rem', color: '#475569' }}>
-                <UserCheck size={14} style={{ display: 'inline', marginRight: '4px' }} />
-                Logged Officer: <strong>{currentUser.name}</strong> ({currentUser.role})
-                <br />
-                All overrides are permanently logged into the enforcement repository for legal auditability.
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontWeight: 600, marginBottom: '4px' }}>
-                  Compliance Verdict Override:
-                </label>
-                <select 
-                  value={overrideStatus}
-                  onChange={(e) => setOverrideStatus(e.target.value)}
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1' }}
-                >
-                  <option value="COMPLIANT">COMPLIANT (Confirmed by officer physical test)</option>
-                  <option value="NON_COMPLIANT">NON-COMPLIANT (Violation issued)</option>
-                  <option value="NEEDS_REVIEW">NEEDS REVIEW (Referred to Legal Metrology Controller)</option>
-                  <option value="EXEMPT">EXEMPT (Statutory Exemption applied under Rule 26)</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontWeight: 600, marginBottom: '4px' }}>
-                  Override Justification / Reason:
-                </label>
-                <select 
-                  value={overrideReason}
-                  onChange={(e) => setOverrideReason(e.target.value)}
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1', marginBottom: '0.5rem' }}
-                >
-                  <option value="Physical measurement verified by officer with calibrated gauge">Physical measurement verified by officer with calibrated gauge</option>
-                  <option value="Label text verified legible under physical inspection">Label text verified legible under physical inspection</option>
-                  <option value="Manufacturer registered address verified on state database">Manufacturer registered address verified on state database</option>
-                  <option value="Exemption certificate produced by packer">Exemption certificate produced by packer</option>
-                  <option value="Confirmed counterfeit or illegal labeling">Confirmed counterfeit or illegal labeling</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', fontWeight: 600, marginBottom: '4px' }}>
-                  Detailed Inspector Observations / Remarks:
-                </label>
-                <textarea 
-                  rows="3"
-                  value={officerRemarks}
-                  onChange={(e) => setOfficerRemarks(e.target.value)}
-                  placeholder="Enter detailed enforcement remarks, seizure note references, or notice details..."
-                  style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1', resize: 'vertical' }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '0.5rem' }}>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => setShowOverrideModal(false)}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary btn-sm"
-                  disabled={isSubmittingOverride}
-                >
-                  {isSubmittingOverride ? 'Saving...' : 'Save & Sign Override'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -69,14 +69,14 @@ function classifyExtractedText(ocrBlocks, defaultCategory = 'General') {
   }
 
   // 3. Month & Year of Packing / Mfg (Rule 6(1)(d))
-  const dateBlock = ocrBlocks.find(b => 
+  const dateBlock = ocrBlocks.find(b =>
     /\b(mfg\.?|pkd\.?|packed|manufactured|month\s*(?:&|and)\s*year|import(?:ed)?|mfd\.?)\b/i.test(b.text) &&
-    /\b(0?[1-9]|1[0-2])[\/\-\.\s]+(20[2-9][0-9]|[2-9][0-9])\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\s\.\-]+(?:20)?[2-9][0-9]\b/i.test(b.text)
+    /\b(0?[1-9]|1[0-2])[\/\-\.\s]+(20[2-9][0-9]|[2-9][0-9])\b|\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\s\.\-]+(?:20)?[2-9][0-9]\b|\b(19|20)\d{2}\b/i.test(b.text)
   );
 
   if (dateBlock) {
     const text = dateBlock.text;
-    const dateMatch = text.match(/\b(0?[1-9]|1[0-2])[\/\-\.](20[2-9][0-9]|[2-9][0-9])\b/);
+    const dateMatch = text.match(/\b(0?[1-9]|1[0-2])[\/\-\.](20[2-9][0-9]|[2-9][0-9])\b/) || text.match(/\b(19|20)(\d{2})\b/);
     extracted.mfgDate = {
       text: text.trim(),
       month: dateMatch ? dateMatch[1] : null,
@@ -87,8 +87,12 @@ function classifyExtractedText(ocrBlocks, defaultCategory = 'General') {
   }
 
   // 4. Manufacturer / Packer / Importer (Rule 6(1)(a) & Rule 10)
-  const mfrBlock = ocrBlocks.find(b => 
-    /\b(manufactured\s+by|mfg\.?\s*by|packed\s+by|pkd\.?\s*by|marketed\s+by|mkt\.?\s*by|imported\s+by|mfd\.?\s*by)\b/i.test(b.text)
+  const mfrBlock = ocrBlocks.find(b =>
+    /\b(manufactured?\s+by|mfg\.?\s*by|packed\s+by|pkd\.?\s*by|marketed?\s+by|mkt\.?\s*by|imported\s+by|mfd\.?\s*by)\b/i.test(b.text) ||
+    /\b(industries?|ltd\.?|limited|pvt\.?\s*ltd\.?)\b.*\b(street|road|nagar|bangalore|karnataka|kolkata|pin|lic\.?\s*no\.?)\b/i.test(b.text)
+  ) || ocrBlocks.find(b =>
+    /\b(industries?|ltd\.?|limited|pvt\.?\s*ltd\.?)\b/i.test(b.text) &&
+    (!b.bbox || b.bbox.y < 260)
   );
 
   if (mfrBlock) {
@@ -124,7 +128,7 @@ function classifyExtractedText(ocrBlocks, defaultCategory = 'General') {
     };
   }
 
-  const bestBeforeBlock = ocrBlocks.find(b => /\b(best\s*before|use\s*before|expiry|expires|exp\.?\s*date)\b/i.test(b.text));
+  const bestBeforeBlock = ocrBlocks.find(b => /\b(best\s*before|use\s*before|expiry|expires|exp\.?\s*date|before\s+\w+\s+months?)\b/i.test(b.text) || /\b(best|est)\s*befor\s*e\b/i.test(b.text));
   if (bestBeforeBlock) {
     const field = { text: bestBeforeBlock.text.trim(), bbox: bestBeforeBlock.bbox, confidence: bestBeforeBlock.confidence || 0.9 };
     if (/\b(expiry|expires|exp\.?\s*date)\b/i.test(bestBeforeBlock.text)) extracted.expiry = field;

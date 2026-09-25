@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Settings2, 
-  ShieldCheck, 
-  Lock, 
-  Unlock, 
-  Edit, 
-  Save, 
-  Check, 
-  AlertCircle, 
-  Plus, 
+import {
+  Settings2,
+  Edit,
+  Save,
+  Check,
+  AlertCircle,
+  Plus,
   Trash2,
   Sliders,
   Scale
 } from 'lucide-react';
 
-export default function RulesConfigView({ currentUser, onSwitchRole }) {
+export default function RulesConfigView({ currentUser }) {
   const [rules, setRules] = useState([]);
   const [standardPacks, setStandardPacks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -114,49 +111,12 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
   return (
     <div className="animate-fade-in">
-      {/* Role Alert Banner */}
-      {!isAdmin ? (
-        <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', padding: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <Lock size={22} className="text-amber-600" />
-            <div>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#92400e' }}>
-                View-Only Mode: Inspector Access Active
-              </div>
-              <div style={{ fontSize: '0.78rem', color: '#b45309' }}>
-                Only Legal Metrology Controllers / System Administrators have privileges to modify rule thresholds, regexes, and Second Schedule tables (FR-7.2).
-              </div>
-            </div>
-          </div>
-          <button 
-            className="btn btn-primary btn-sm"
-            onClick={() => onSwitchRole('ADMIN')}
-          >
-            <Unlock size={14} /> Switch to Admin Account
-          </button>
-        </div>
-      ) : (
-        <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '0.75rem 1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#166534' }}>
-            <ShieldCheck size={18} />
-            <strong>Administrator Privileges Active:</strong> You can configure statutory rules, regex patterns, and Second Schedule standard pack sizes.
-          </div>
-          <button 
-            className="btn btn-secondary btn-sm"
-            onClick={() => onSwitchRole('INSPECTOR')}
-          >
-            Switch to Inspector
-          </button>
-        </div>
-      )}
-
       {saveSuccessMsg && (
         <div style={{ background: '#f0fdf4', border: '1px solid #86efac', color: '#15803d', padding: '0.6rem 1rem', borderRadius: '6px', fontSize: '0.85rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Check size={16} /> {saveSuccessMsg}
         </div>
       )}
 
-      {/* Section 1: Configurable Rules Table */}
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div className="card-header">
           <div className="card-title">
@@ -176,7 +136,7 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
               <th>Mandatory Field / Title</th>
               <th>Category</th>
               <th>Severity</th>
-              <th style={{ textAlign: 'right' }}>Actions</th>
+              <th aria-label="Edit controls"></th>
             </tr>
           </thead>
           <tbody>
@@ -207,23 +167,18 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
                   <div style={{ fontWeight: 600 }}>{rule.title}</div>
                   <div style={{ fontSize: '0.72rem', color: '#64748b' }}>{rule.description}</div>
                 </td>
-                <td>
-                  <span className="badge badge-info">{rule.category}</span>
-                </td>
+                <td><span className="badge badge-info">{rule.category}</span></td>
                 <td>
                   <span className={`badge ${rule.severity === 'CRITICAL' ? 'badge-danger' : 'badge-warning'}`}>
                     {rule.severity}
                   </span>
                 </td>
                 <td style={{ textAlign: 'right' }}>
-                  <button 
-                    className="btn btn-secondary btn-sm"
-                    disabled={!isAdmin}
-                    onClick={() => setEditingRule(rule)}
-                    title={isAdmin ? 'Edit parameters' : 'Admin only'}
-                  >
-                    <Edit size={13} /> Edit
-                  </button>
+                  {isAdmin && (
+                    <button className="btn btn-secondary btn-sm" onClick={() => setEditingRule(rule)} title="Edit parameters">
+                      <Edit size={13} /> Edit
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -245,7 +200,7 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
           {standardPacks.map((sp) => (
-            <div 
+            <div
               key={sp.category}
               style={{
                 border: '1px solid #e2e8f0',
@@ -267,15 +222,15 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
                   Prescribed Sizes ({sp.unit}):
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     defaultValue={sp.sizes.join(', ')}
                     disabled={!isAdmin}
                     id={`input-${sp.category}`}
                     style={{ flex: 1, padding: '0.35rem 0.6rem', fontSize: '0.8rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
                   />
                   {isAdmin && (
-                    <button 
+                    <button
                       className="btn btn-secondary btn-sm"
                       onClick={() => {
                         const val = document.getElementById(`input-${sp.category}`).value;
@@ -295,7 +250,7 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
       {/* Edit Rule Modal */}
       {editingRule && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             top: 0,
@@ -316,7 +271,7 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
                 <Edit size={18} className="text-blue-600" />
                 Edit Rule: {editingRule.ruleReference}
               </div>
-              <button 
+              <button
                 onClick={() => setEditingRule(null)}
                 style={{ background: 'none', border: 'none', fontSize: '1.25rem', cursor: 'pointer', color: '#64748b' }}
               >
@@ -327,9 +282,9 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
             <form onSubmit={handleSaveRuleConfig} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', fontSize: '0.85rem' }}>
               <div>
                 <label style={{ display: 'block', fontWeight: 600, marginBottom: '3px' }}>Rule Title:</label>
-                <input 
-                  type="text" 
-                  value={editingRule.title} 
+                <input
+                  type="text"
+                  value={editingRule.title}
                   onChange={(e) => setEditingRule({ ...editingRule, title: e.target.value })}
                   style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1' }}
                 />
@@ -337,9 +292,9 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
               <div>
                 <label style={{ display: 'block', fontWeight: 600, marginBottom: '3px' }}>Rule Description:</label>
-                <textarea 
+                <textarea
                   rows="2"
-                  value={editingRule.description} 
+                  value={editingRule.description}
                   onChange={(e) => setEditingRule({ ...editingRule, description: e.target.value })}
                   style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1' }}
                 />
@@ -347,8 +302,8 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
               <div>
                 <label style={{ display: 'block', fontWeight: 600, marginBottom: '3px' }}>Severity Level:</label>
-                <select 
-                  value={editingRule.severity} 
+                <select
+                  value={editingRule.severity}
                   onChange={(e) => setEditingRule({ ...editingRule, severity: e.target.value })}
                   style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid #cbd5e1' }}
                 >
@@ -361,7 +316,7 @@ export default function RulesConfigView({ currentUser, onSwitchRole }) {
 
               <div>
                 <label style={{ display: 'block', fontWeight: 600, marginBottom: '3px' }}>Rule Parameters (JSON):</label>
-                <textarea 
+                <textarea
                   rows="5"
                   value={JSON.stringify(editingRule.parameters, null, 2)}
                   onChange={(e) => {

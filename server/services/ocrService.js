@@ -6,6 +6,13 @@
 const fs = require('fs');
 const path = require('path');
 
+let sharp = null;
+try {
+  sharp = require('sharp');
+} catch (e) {
+  console.warn('Sharp not loaded, OCR will use the original upload image');
+}
+
 let tesseract = null;
 try {
   tesseract = require('tesseract.js');
@@ -73,17 +80,52 @@ async function processImageOCR(imagePath, sampleData = null) {
     };
   }
 
+  // Tesseract's native image reader does not reliably decode SVG files.
+  // Return an auditable uncertainty result instead of allowing the worker to
+  // terminate the server process.
+  if (imagePath && path.extname(imagePath).toLowerCase() === '.svg') {
+    return {
+      success: true,
+      blocks: [],
+      rawText: '',
+      source: 'unsupported-format',
+      warning: 'Unable to verify from the uploaded image. SVG uploads require conversion to PNG or JPEG before OCR.'
+    };
+  }
+
   // Custom uploaded file: Run Tesseract.js
   if (tesseract && fs.existsSync(imagePath)) {
     try {
       console.log('Running Tesseract OCR on:', imagePath);
-      const result = await tesseract.recognize(imagePath, 'eng', {
+      let ocrInput = imagePath;
+      let coordinateScale = 1;
+
+      if (sharp) {
+        const metadata = await sharp(imagePath).metadata();
+        if (metadata.width) {
+          coordinateScale = 2;
+          ocrInput = await sharp(imagePath)
+            .resize({ width: metadata.width * coordinateScale })
+            .grayscale()
+            .normalize()
+            .sharpen()
+            .jpeg()
+            .toBuffer();
+        }
+      }
+
+      const result = await tesseract.recognize(ocrInput, 'eng', {
+        config: { tessedit_pageseg_mode: '11' },
         logger: m => console.log(`[OCR] ${m.status}: ${(m.progress * 100).toFixed(0)}%`)
       });
 
       const blocks = [];
-      if (result.data && result.data.lines) {
-        result.data.lines.forEach((line, idx) => {
+      const lines = result.data?.lines || [];
+
+      // Tesseract.js 7 no longer includes `data.lines` by default. Preserve
+      // the line contract expected by the classifier using the returned text.
+      if (lines.length > 0) {
+        lines.forEach((line, idx) => {
           if (line.text && line.text.trim().length > 1) {
             const bbox = line.bbox || {
               x0: 50,
@@ -94,12 +136,23 @@ async function processImageOCR(imagePath, sampleData = null) {
             blocks.push({
               text: line.text.trim(),
               bbox: {
-                x: bbox.x0,
-                y: bbox.y0,
-                w: Math.max(20, bbox.x1 - bbox.x0),
-                h: Math.max(15, bbox.y1 - bbox.y0)
+                x: Math.round(bbox.x0 / coordinateScale),
+                y: Math.round(bbox.y0 / coordinateScale),
+                w: Math.max(20, Math.round((bbox.x1 - bbox.x0) / coordinateScale)),
+                h: Math.max(15, Math.round((bbox.y1 - bbox.y0) / coordinateScale))
               },
               confidence: (line.confidence || 85) / 100
+            });
+          }
+        });
+      } else if (result.data?.text) {
+        result.data.text.split(/\r?\n/).forEach((text, idx) => {
+          const normalizedText = text.trim();
+          if (normalizedText.length > 1) {
+            blocks.push({
+              text: normalizedText,
+              bbox: { x: 50, y: 50 + idx * 40, w: 500, h: 35 },
+              confidence: (result.data.confidence || 85) / 100
             });
           }
         });
